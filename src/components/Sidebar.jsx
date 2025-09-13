@@ -51,7 +51,7 @@ function Sidebar() {
             onClick={toggleSubmenu}
             style={{ cursor: "pointer", fontWeight: "500", color: "#333" }}
           >
-            Menú{" "}
+            Administración{" "}
             <FaChevronDown
               className={`ms-2 ${submenuOpen ? "rotate-180" : ""}`}
             />
@@ -59,11 +59,11 @@ function Sidebar() {
 
           <Collapse in={submenuOpen}>
             <div>
-              <Nav.Link href="/submenu1" className="ps-4">
-                Submenú 1
+              <Nav.Link href="/usuarios" className="ps-4">
+                Usuarios
               </Nav.Link>
-              <Nav.Link href="/submenu2" className="ps-4">
-                Submenú 2
+              <Nav.Link href="/*" className="ps-4">
+                Condominio
               </Nav.Link>
             </div>
           </Collapse>

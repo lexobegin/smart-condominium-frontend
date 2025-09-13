@@ -6,8 +6,8 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RedirectToInitial from "./components/RedirectToInitial";
 
-import Usuarios from "./pages/Usuarios";
-import UsuarioForm from "./pages/UsuarioForm";
+import Usuarios from "./pages/usuario/Usuarios";
+import UsuarioForm from "./pages/usuario/UsuarioForm";
 
 function App() {
   return (

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button, Spinner } from "react-bootstrap";
-import { createUser, fetchUser, updateUser } from "../services/users";
-import DashboardLayout from "../components/DashboardLayout";
+import { createUser, fetchUser, updateUser } from "../../services/users";
+import DashboardLayout from "../../components/DashboardLayout";
 import { useNavigate, useParams } from "react-router-dom";
 
 function UsuarioForm() {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Spinner } from "react-bootstrap";
-import { fetchUsers, deleteUser } from "../services/users";
-import DashboardLayout from "../components/DashboardLayout";
+import { fetchUsers, deleteUser } from "../../services/users";
+import DashboardLayout from "../../components/DashboardLayout";
 import { useNavigate } from "react-router-dom";
 
 function Usuarios() {
