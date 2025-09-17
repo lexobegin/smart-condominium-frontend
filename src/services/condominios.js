@@ -1,8 +1,18 @@
 // src/services/condominios.js
 import api from "./axios";
 
-export async function fetchCondominios() {
+/*export async function fetchCondominios() {
   const resp = await api.get("/condominios/");
+  return resp.data;
+}*/
+export async function fetchCondominios(page = 1, search = "") {
+  const params = new URLSearchParams();
+  params.append("page", page);
+  if (search) {
+    params.append("search", search);
+  }
+
+  const resp = await api.get(`/condominios/?${params.toString()}`);
   return resp.data;
 }
 

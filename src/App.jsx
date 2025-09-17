@@ -8,6 +8,8 @@ import RedirectToInitial from "./components/RedirectToInitial";
 
 import Usuarios from "./pages/usuario/Usuarios";
 import UsuarioForm from "./pages/usuario/UsuarioForm";
+import Condominios from "./pages/condominio/condominios";
+import UnidadHabitacional from "./pages/UnidadHabitacional/UnidadHabitacional";
 
 function App() {
   return (
@@ -49,6 +51,24 @@ function App() {
           element={
             <ProtectedRoute>
               <UsuarioForm />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/condominios"
+          element={
+            <ProtectedRoute>
+              <Condominios />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/unidades"
+          element={
+            <ProtectedRoute>
+              {" "}
+              <UnidadHabitacional />
             </ProtectedRoute>
           }
         />

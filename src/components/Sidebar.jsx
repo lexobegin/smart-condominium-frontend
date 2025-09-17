@@ -62,14 +62,17 @@ function Sidebar() {
               <Nav.Link href="/usuarios" className="ps-4">
                 Usuarios
               </Nav.Link>
-              <Nav.Link href="/*" className="ps-4">
-                Condominio
+              <Nav.Link href="/condominios" className="ps-4">
+                Condominios
+              </Nav.Link>
+              <Nav.Link href="/unidades" className="ps-4">
+                Unidad Habitacional
               </Nav.Link>
             </div>
           </Collapse>
 
-          <Nav.Link href="/usuarios">Usuarios</Nav.Link>
-          <Nav.Link href="/condominios">Condominios</Nav.Link>
+          {/*<Nav.Link href="/usuarios">Usuarios</Nav.Link>
+          <Nav.Link href="/condominios">Condominios</Nav.Link>*/}
           <Nav.Link href="/reportes">Reportes</Nav.Link>
         </Nav>
       </div>
