@@ -8,8 +8,8 @@ import RedirectToInitial from "./components/RedirectToInitial";
 
 import Usuarios from "./pages/usuario/Usuarios";
 import UsuarioForm from "./pages/usuario/UsuarioForm";
-import Condominios from "./pages/condominio/condominios";
-import UnidadHabitacional from "./pages/UnidadHabitacional/UnidadHabitacional";
+import Condominios from "./pages/condominio/Condominios";
+import UnidadHabitacional from "./pages/unidadHabitacional/UnidadHabitacional";
 
 function App() {
   return (
