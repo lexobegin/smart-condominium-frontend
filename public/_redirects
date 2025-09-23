@@ -1,0 +1,2 @@
+# En la carpeta public/ crea un archivo _redirects con:
+/*    /index.html   200
