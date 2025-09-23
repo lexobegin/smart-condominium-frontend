@@ -21,6 +21,7 @@ function UsuarioForm() {
     if (id) {
       loadUser();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const loadUser = async () => {
@@ -28,14 +29,16 @@ function UsuarioForm() {
       setLoading(true);
       const data = await fetchUser(id);
       setForm({
-        nombre: data.nombre,
-        apellidos: data.apellidos,
-        email: data.email,
-        tipo: data.tipo,
-        estado: data.estado,
+        nombre: data.nombre || "",
+        apellidos: data.apellidos || "",
+        email: data.email || "",
+        tipo: data.tipo || "",
+        estado: data.estado || "",
       });
     } catch (err) {
       console.error("Error cargando usuario:", err);
+      alert("No se pudo cargar el usuario");
+      navigate("/usuarios");
     } finally {
       setLoading(false);
     }
@@ -50,17 +53,37 @@ function UsuarioForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       setSaving(true);
+
       if (id) {
-        await updateUser(id, form);
+        // UPDATE: enviar solo campos editables (email es read_only en tu serializer)
+        const payload = {
+          nombre: form.nombre,
+          apellidos: form.apellidos,
+          tipo: form.tipo,
+          estado: form.estado,
+        };
+        await updateUser(id, payload); // PATCH (ya ajustado en services/users.js)
       } else {
+        // CREATE: usa UsuarioRegistroSerializer (si tu API exige más campos, agrégalos aquí)
         await createUser(form);
       }
+
       navigate("/usuarios");
     } catch (err) {
       console.error("Error guardando:", err);
-      alert("Error salvando usuario");
+      const data = err?.response?.data;
+
+      if (data && typeof data === "object") {
+        const msg = Object.entries(data)
+          .map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(" ") : v}`)
+          .join("\n");
+        alert(`Error guardando usuario:\n${msg}`);
+      } else {
+        alert("Error guardando usuario");
+      }
     } finally {
       setSaving(false);
     }
@@ -72,7 +95,7 @@ function UsuarioForm() {
       {loading ? (
         <Spinner animation="border" />
       ) : (
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit} noValidate>
           <Form.Group className="mb-3">
             <Form.Label>Nombre</Form.Label>
             <Form.Control
@@ -80,8 +103,10 @@ function UsuarioForm() {
               value={form.nombre}
               onChange={handleChange}
               required
+              autoFocus
             />
           </Form.Group>
+
           <Form.Group className="mb-3">
             <Form.Label>Apellidos</Form.Label>
             <Form.Control
@@ -91,6 +116,7 @@ function UsuarioForm() {
               required
             />
           </Form.Group>
+
           <Form.Group className="mb-3">
             <Form.Label>Email</Form.Label>
             <Form.Control
@@ -99,8 +125,10 @@ function UsuarioForm() {
               value={form.email}
               onChange={handleChange}
               required
+              disabled={!!id} // deshabilitado en edición (read_only en backend)
             />
           </Form.Group>
+
           <Form.Group className="mb-3">
             <Form.Label>Tipo</Form.Label>
             <Form.Select
@@ -117,6 +145,7 @@ function UsuarioForm() {
               <option value="propietario">Propietario</option>
             </Form.Select>
           </Form.Group>
+
           <Form.Group className="mb-3">
             <Form.Label>Estado</Form.Label>
             <Form.Select
@@ -131,10 +160,11 @@ function UsuarioForm() {
               <option value="pendiente">Pendiente</option>
             </Form.Select>
           </Form.Group>
+
           <Button variant="primary" type="submit" disabled={saving}>
             {saving ? "Guardando..." : "Guardar"}
           </Button>{" "}
-          <Button variant="secondary" onClick={() => navigate("/usuarios")}>
+          <Button variant="secondary" onClick={() => navigate("/usuarios")} disabled={saving}>
             Cancelar
           </Button>
         </Form>

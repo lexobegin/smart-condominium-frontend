@@ -1,37 +1,34 @@
 // src/services/users.js
-import api from "./axios"; // tu instancia de Axios que ya tienes
+import api from "./axios";
 
-/*export async function fetchUsers() {
-  const resp = await api.get("/usuarios/"); // Ajusta la ruta según tu backend
-  return resp.data;
-}*/
+/** Lista paginada con búsqueda opcional (?page=&search=) */
+export async function fetchUsers(page = 1, search = "") {
+  const { data } = await api.get("/usuarios/", {
+    params: { page, ...(search ? { search } : {}) },
+  });
+  return data; // { count, results, ... }
+}
 
-/*export const fetchUsers = async (page = 1) => {
-  const response = await api.get(`/usuarios/?page=${page}`);
-  return response.data;
-};*/
-
-export const fetchUsers = async (page = 1, search = "") => {
-  const response = await api.get(`/usuarios/?page=${page}&search=${search}`);
-  return response.data;
-};
-
+/** Detalle por ID */
 export async function fetchUser(userId) {
-  const resp = await api.get(`/usuarios/${userId}/`);
-  return resp.data;
+  const { data } = await api.get(`/usuarios/${userId}/`);
+  return data;
 }
 
-export async function createUser(data) {
-  const resp = await api.post("/usuarios/", data);
-  return resp.data;
+/** Crear (usa UsuarioRegistroSerializer en tu backend) */
+export async function createUser(payload) {
+  const { data } = await api.post("/usuarios/", payload);
+  return data;
 }
 
-export async function updateUser(userId, data) {
-  const resp = await api.put(`/usuarios/${userId}/`, data);
-  return resp.data;
+/** Actualizar (PATCH para no enviar campos read_only como email) */
+export async function updateUser(userId, payload) {
+  const { data } = await api.patch(`/usuarios/${userId}/`, payload);
+  return data;
 }
 
+/** Eliminar */
 export async function deleteUser(userId) {
-  const resp = await api.delete(`/usuarios/${userId}/`);
-  return resp.data;
+  await api.delete(`/usuarios/${userId}/`);
+  return true; // DRF suele devolver 204 sin cuerpo
 }

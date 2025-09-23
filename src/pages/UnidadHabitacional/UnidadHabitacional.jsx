@@ -12,39 +12,51 @@ function UnidadHabitacional() {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
+  // Carga cuando cambia la página
   useEffect(() => {
     loadUnidades(currentPage, searchTerm);
-  }, [currentPage, searchTerm]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
+
+  // Al cambiar la búsqueda, resetea a página 1 (y se dispara la carga por el efecto de arriba)
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
 
   const loadUnidades = async (page, search) => {
     try {
       setLoading(true);
       const data = await fetchUnidades(page, search);
-      setUnidades(data.results);
-      const total = Math.ceil(data.count / 10); // PAGE_SIZE = 10
-      setTotalPages(total);
+      setUnidades(data.results || []);
+      setTotalPages(Math.ceil((data.count || 0) / 10)); // si tu PAGE_SIZE backend es 10
     } catch (err) {
       console.error("Error cargando unidades:", err);
+      setUnidades([]);
+      setTotalPages(1);
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async (unidadId) => {
-    if (!window.confirm("¿Estás seguro de que quieres eliminar esta unidad?"))
-      return;
+    if (!window.confirm("¿Estás seguro de que quieres eliminar esta unidad?")) return;
+
+    // Si esta era la última fila visible y no estamos en la primera página,
+    // tras borrar retrocedemos de página para no quedarnos en una página vacía.
+    const wasLastItemOnPage = unidades.length === 1;
+
     try {
       await deleteUnidad(unidadId);
-      loadUnidades(currentPage);
+      if (wasLastItemOnPage && currentPage > 1) {
+        setCurrentPage((p) => p - 1);
+      } else {
+        loadUnidades(currentPage, searchTerm);
+      }
     } catch (err) {
       console.error("Error eliminando unidad:", err);
       alert("Error al eliminar unidad");
     }
   };
-
-  const filteredUnidades = unidades.filter((u) =>
-    `${u.codigo} ${u.tipo}`.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   return (
     <DashboardLayout>
@@ -82,32 +94,40 @@ function UnidadHabitacional() {
               </tr>
             </thead>
             <tbody>
-              {filteredUnidades.map((u) => (
-                <tr key={u.id}>
-                  <td>{u.id}</td>
-                  <td>{u.codigo}</td>
-                  <td>{u.tipo}</td>
-                  <td>{u.metros_cuadrados}</td>
-                  <td>{u.estado}</td>
-                  <td>{u.condominio?.nombre}</td>
-                  <td>
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      onClick={() => navigate(`/unidades/editar/${u.id}`)}
-                    >
-                      Editar
-                    </Button>{" "}
-                    <Button
-                      variant="danger"
-                      size="sm"
-                      onClick={() => handleDelete(u.id)}
-                    >
-                      Eliminar
-                    </Button>
+              {unidades.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="text-center">
+                    No hay resultados.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                unidades.map((u) => (
+                  <tr key={u.id}>
+                    <td>{u.id}</td>
+                    <td>{u.codigo}</td>
+                    <td>{u.tipo}</td>
+                    <td>{u.metros_cuadrados}</td>
+                    <td>{u.estado}</td>
+                    <td>{u.condominio?.nombre}</td>
+                    <td>
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        onClick={() => navigate(`/unidades/editar/${u.id}`)}
+                      >
+                        Editar
+                      </Button>{" "}
+                      <Button
+                        variant="danger"
+                        size="sm"
+                        onClick={() => handleDelete(u.id)}
+                      >
+                        Eliminar
+                      </Button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </Table>
 
