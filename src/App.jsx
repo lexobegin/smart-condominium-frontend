@@ -18,7 +18,7 @@ import Editar from "./pages/areas-comunes/Editar";
 
 // Condominios
 import Condominios from "./pages/condominio/Condominios_TEMP";
-import CondominioForm from "./pages/Condominio/CondominiosForm";
+import CondominioForm from "./pages/condominio/CondominiosForm";
 
 // Unidades
 import UnidadHabitacional from "./pages/UnidadHabitacional/UnidadHabitacional";
