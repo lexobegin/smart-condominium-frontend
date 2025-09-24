@@ -1,18 +1,28 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import Login from "./pages/Login";
 import Logout from "./pages/Logout";
 import Dashboard from "./pages/Dashboard";
+
 import ProtectedRoute from "./components/ProtectedRoute";
 import RedirectToInitial from "./components/RedirectToInitial";
 
+// Usuarios
 import Usuarios from "./pages/usuario/Usuarios";
 import UsuarioForm from "./pages/usuario/UsuarioForm";
-import UnidadHabitacional from "./pages/UnidadHabitacional/UnidadHabitacional";
-import Condominios from "./pages/condominio/Condominios_TEMP";
+
 import Listar from "./pages/areas-comunes/Listar";
 import Crear from "./pages/areas-comunes/Crear";
 import Editar from "./pages/areas-comunes/Editar";
+
+// Condominios
+import Condominios from "./pages/condominio/Condominios_TEMP";
+import CondominioForm from "./pages/Condominio/CondominiosForm";
+
+// Unidades
+import UnidadHabitacional from "./pages/UnidadHabitacional/UnidadHabitacional";
+import UnidadForm from "./pages/UnidadHabitacional/UnidadForm";
 
 function App() {
   return (
@@ -21,8 +31,11 @@ function App() {
         {/* Redirección desde la raíz */}
         <Route path="/" element={<RedirectToInitial />} />
 
+        {/* Autenticación */}
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
+
+        {/* Dashboard protegido */}
         <Route
           path="/dashboard"
           element={
@@ -31,6 +44,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* Usuarios */}
         <Route
           path="/usuarios"
           element={
@@ -39,7 +54,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/usuarios/nuevo"
           element={
@@ -48,7 +62,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/usuarios/editar/:id"
           element={
@@ -58,6 +71,7 @@ function App() {
           }
         />
 
+        {/* Condominios */}
         <Route
           path="/condominios"
           element={
@@ -67,15 +81,47 @@ function App() {
           }
         />
         <Route
-          path="/unidades"
+          path="/condominios/nuevo"
           element={
             <ProtectedRoute>
-              {" "}
-              <UnidadHabitacional />
+              <CondominioForm />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/condominios/editar/:id"
+          element={
+            <ProtectedRoute>
+              <CondominioForm />
             </ProtectedRoute>
           }
         />
 
+        {/* Unidades */}
+        <Route
+          path="/unidades"
+          element={
+            <ProtectedRoute>
+              <UnidadHabitacional />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/unidades/nueva"
+          element={
+            <ProtectedRoute>
+              <UnidadForm />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/unidades/editar/:id"
+          element={
+            <ProtectedRoute>
+              <UnidadForm />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/areas-comunes"
           element={

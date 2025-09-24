@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Table, Button, Spinner } from "react-bootstrap";
-import { fetchCondominios, deleteCondominio } from "../../services/condominios";
+import {
+  fetchCondominios,
+  deleteCondominio,
+} from "../../services/condominios";
 import DashboardLayout from "../../components/DashboardLayout";
 import { useNavigate } from "react-router-dom";
 
@@ -12,50 +15,49 @@ function Condominios() {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
+  // Carga cuando cambia la página
   useEffect(() => {
     loadCondominios(currentPage, searchTerm);
-  }, [currentPage, searchTerm]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
+
+  // Al cambiar la búsqueda, resetea a página 1 (y se dispara la carga por el efecto de arriba)
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
 
   const loadCondominios = async (page, search) => {
     try {
       setLoading(true);
       const data = await fetchCondominios(page, search);
-      setCondominios(data.results);
-      const total = Math.ceil(data.count / 10); // PAGE_SIZE = 10
-      setTotalPages(total);
+      setCondominios(data.results || []);
+      setTotalPages(Math.ceil((data.count || 0) / 10)); // si tu PAGE_SIZE backend es 10
     } catch (err) {
       console.error("Error cargando condominios:", err);
+      setCondominios([]);
+      setTotalPages(1);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDelete = async (condominioId) => {
-    if (
-      !window.confirm("¿Estás seguro de que quieres eliminar este condominio?")
-    )
-      return;
+  const handleDelete = async (id) => {
+    if (!window.confirm("¿Estás seguro de que quieres eliminar este condominio?")) return;
     try {
-      await deleteCondominio(condominioId);
-      loadCondominios(currentPage);
+      await deleteCondominio(id);
+      // recarga manteniendo página y búsqueda actuales
+      loadCondominios(currentPage, searchTerm);
     } catch (err) {
       console.error("Error eliminando condominio:", err);
       alert("Error al eliminar condominio");
     }
   };
 
-  const filteredCondominios = condominios.filter((c) =>
-    c.nombre.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   return (
     <DashboardLayout>
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2 className="mb-0">Condominios</h2>
-        <Button
-          variant="success"
-          onClick={() => navigate("/condominios/nuevo")}
-        >
+        <Button variant="success" onClick={() => navigate("/condominios/nuevo")}>
           Nuevo Condominio
         </Button>
       </div>
@@ -86,31 +88,39 @@ function Condominios() {
               </tr>
             </thead>
             <tbody>
-              {filteredCondominios.map((c) => (
-                <tr key={c.id}>
-                  <td>{c.id}</td>
-                  <td>{c.nombre}</td>
-                  <td>{c.direccion}</td>
-                  <td>{c.telefono}</td>
-                  <td>{c.email}</td>
-                  <td>
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      onClick={() => navigate(`/condominios/editar/${c.id}`)}
-                    >
-                      Editar
-                    </Button>{" "}
-                    <Button
-                      variant="danger"
-                      size="sm"
-                      onClick={() => handleDelete(c.id)}
-                    >
-                      Eliminar
-                    </Button>
+              {condominios.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="text-center">
+                    No hay resultados.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                condominios.map((c) => (
+                  <tr key={c.id}>
+                    <td>{c.id}</td>
+                    <td>{c.nombre}</td>
+                    <td>{c.direccion}</td>
+                    <td>{c.telefono}</td>
+                    <td>{c.email}</td>
+                    <td>
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        onClick={() => navigate(`/condominios/editar/${c.id}`)}
+                      >
+                        Editar
+                      </Button>{" "}
+                      <Button
+                        variant="danger"
+                        size="sm"
+                        onClick={() => handleDelete(c.id)}
+                      >
+                        Eliminar
+                      </Button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </Table>
 

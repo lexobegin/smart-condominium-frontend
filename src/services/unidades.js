@@ -1,31 +1,41 @@
 // src/services/unidades.js
 import api from "./axios";
 
+/** Lista paginada con búsqueda opcional (?page=&search=) */
 export async function fetchUnidades(page = 1, search = "") {
-  const params = new URLSearchParams();
-  params.append("page", page);
-  if (search) params.append("search", search);
-
-  const resp = await api.get(`/unidades/?${params.toString()}`);
-  return resp.data;
+  const { data } = await api.get("/unidades/", {
+    params: { page, ...(search ? { search } : {}) },
+  });
+  return data; // { count, results, ... }
 }
 
+/** Detalle por ID */
 export async function fetchUnidad(id) {
-  const resp = await api.get(`/unidades/${id}/`);
-  return resp.data;
+  const { data } = await api.get(`/unidades/${id}/`);
+  return data;
 }
 
-export async function createUnidad(data) {
-  const resp = await api.post("/unidades/", data);
-  return resp.data;
+/** Crear */
+export async function createUnidad(payload) {
+  const { data } = await api.post("/unidades/", payload);
+  return data;
 }
 
-export async function updateUnidad(id, data) {
-  const resp = await api.put(`/unidades/${id}/`, data);
-  return resp.data;
+/**
+ * Actualizar (PUT = reemplazo completo).
+ * Si prefieres actualización parcial, cambia a api.patch.
+ */
+export async function updateUnidad(id, payload) {
+  const { data } = await api.put(`/unidades/${id}/`, payload);
+  return data;
+
+  // Alternativa parcial:
+  // const { data } = await api.patch(`/unidades/${id}/`, payload);
+  // return data;
 }
 
+/** Eliminar */
 export async function deleteUnidad(id) {
-  const resp = await api.delete(`/unidades/${id}/`);
-  return resp.data;
+  await api.delete(`/unidades/${id}/`);
+  return true; // DRF suele devolver 204 sin cuerpo
 }
