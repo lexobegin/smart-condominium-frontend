@@ -12,7 +12,13 @@ export async function fetchCondominios(page = 1, search = "") {
   return data; // { count, next, previous, results: [...] }
 }
 
+export const listarCondominios = async () => {
+  const response = await api.get("/condominios/todos/");
+  return response.data;
+};
+
 /** Obtiene un condominio por ID */
+
 export async function fetchCondominio(id) {
   const { data } = await api.get(`/condominios/${id}/`);
   return data;

@@ -12,13 +12,17 @@ import RedirectToInitial from "./components/RedirectToInitial";
 import Usuarios from "./pages/usuario/Usuarios";
 import UsuarioForm from "./pages/usuario/UsuarioForm";
 
+import Listar from "./pages/areas-comunes/Listar";
+import Crear from "./pages/areas-comunes/Crear";
+import Editar from "./pages/areas-comunes/Editar";
+
 // Condominios
-import Condominios from "./pages/Condominio/Condominios";
+import Condominios from "./pages/condominio/Condominios_TEMP";
 import CondominioForm from "./pages/Condominio/CondominiosForm";
 
 // Unidades
-import UnidadHabitacional from "./pages/unidadHabitacional/UnidadHabitacional";
-import UnidadForm from "./pages/unidadHabitacional/UnidadForm";
+import UnidadHabitacional from "./pages/UnidadHabitacional/UnidadHabitacional";
+import UnidadForm from "./pages/UnidadHabitacional/UnidadForm";
 
 function App() {
   return (
@@ -115,6 +119,32 @@ function App() {
           element={
             <ProtectedRoute>
               <UnidadForm />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/areas-comunes"
+          element={
+            <ProtectedRoute>
+              <Listar />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/areas-comunes/crear"
+          element={
+            <ProtectedRoute>
+              <Crear />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/areas-comunes/editar/:id"
+          element={
+            <ProtectedRoute>
+              <Editar />
             </ProtectedRoute>
           }
         />
