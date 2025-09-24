@@ -10,6 +10,9 @@ import Usuarios from "./pages/usuario/Usuarios";
 import UsuarioForm from "./pages/usuario/UsuarioForm";
 import UnidadHabitacional from "./pages/UnidadHabitacional/UnidadHabitacional";
 import Condominios from "./pages/condominio/Condominios_TEMP";
+import Listar from "./pages/areas-comunes/Listar";
+import Crear from "./pages/areas-comunes/Crear";
+import Editar from "./pages/areas-comunes/Editar";
 
 function App() {
   return (
@@ -69,6 +72,33 @@ function App() {
             <ProtectedRoute>
               {" "}
               <UnidadHabitacional />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/areas-comunes"
+          element={
+            <ProtectedRoute>
+              <Listar />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/areas-comunes/crear"
+          element={
+            <ProtectedRoute>
+              <Crear />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/areas-comunes/editar/:id"
+          element={
+            <ProtectedRoute>
+              <Editar />
             </ProtectedRoute>
           }
         />

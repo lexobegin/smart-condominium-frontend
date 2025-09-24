@@ -16,6 +16,11 @@ export async function fetchCondominios(page = 1, search = "") {
   return resp.data;
 }
 
+export const listarCondominios = async () => {
+  const response = await api.get("/condominios/todos/");
+  return response.data;
+};
+
 export async function fetchCondominio(id) {
   const resp = await api.get(`/condominios/${id}/`);
   return resp.data;

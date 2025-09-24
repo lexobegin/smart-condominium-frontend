@@ -4,20 +4,29 @@ import { FaBars, FaChevronDown } from "react-icons/fa";
 
 function Sidebar() {
   const [show, setShow] = useState(false);
-  const [submenuOpen, setSubmenuOpen] = useState(false);
+  const [menusOpen, setMenusOpen] = useState({
+    admin: false,
+    areas: false,
+  });
 
   const handleToggle = () => setShow(!show);
   const handleClose = () => setShow(false);
-  const toggleSubmenu = () => setSubmenuOpen(!submenuOpen);
+
+  const toggleMenu = (menu) => {
+    setMenusOpen((prev) => ({
+      ...prev,
+      [menu]: !prev[menu],
+    }));
+  };
 
   return (
     <>
-      {/* Botón para abrir el sidebar en móvil (visible solo en sm y abajo) */}
+      {/* Botón menú para móvil */}
       <div
         className="d-md-none bg-light w-100"
         style={{
           position: "sticky",
-          top: "56px", // justo debajo del navbar (que es fixed)
+          top: "56px",
           zIndex: 1050,
           padding: "10px 16px",
           backgroundColor: "#f8f9fa",
@@ -29,14 +38,14 @@ function Sidebar() {
         </Button>
       </div>
 
-      {/* Sidebar permanente en pantallas md y mayores */}
+      {/* Sidebar fijo para pantallas md+ */}
       <div
         className="d-none d-md-block bg-light"
         style={{
           width: "250px",
           height: "100vh",
           position: "fixed",
-          top: "56px", // Altura del navbar
+          top: "56px",
           left: 0,
           borderRight: "1px solid #ddd",
           overflowY: "auto",
@@ -46,33 +55,61 @@ function Sidebar() {
         <Nav className="flex-column px-3">
           <Nav.Link href="/dashboard">Dashboard</Nav.Link>
 
+          {/* Administración */}
           <div
             className="d-flex justify-content-between align-items-center py-2"
-            onClick={toggleSubmenu}
+            onClick={() => toggleMenu("admin")}
             style={{ cursor: "pointer", fontWeight: "500", color: "#333" }}
           >
             Administración{" "}
             <FaChevronDown
-              className={`ms-2 ${submenuOpen ? "rotate-180" : ""}`}
+              className={`ms-2 ${menusOpen.admin ? "rotate-180" : ""}`}
             />
           </div>
 
-          <Collapse in={submenuOpen}>
+          <Collapse in={menusOpen.admin}>
             <div>
+              <Nav.Link className="ps-4">Role y Permiso</Nav.Link>
               <Nav.Link href="/usuarios" className="ps-4">
                 Usuarios
               </Nav.Link>
               <Nav.Link href="/condominios" className="ps-4">
-                Condominios
+                Condominio
               </Nav.Link>
               <Nav.Link href="/unidades" className="ps-4">
                 Unidad Habitacional
               </Nav.Link>
+              <Nav.Link className="ps-4">Cuota y Expensas</Nav.Link>
+              <Nav.Link className="ps-4">Multa y Cargo Adic.</Nav.Link>
+              <Nav.Link className="ps-4">Comunicado</Nav.Link>
             </div>
           </Collapse>
 
-          {/*<Nav.Link href="/usuarios">Usuarios</Nav.Link>
-          <Nav.Link href="/condominios">Condominios</Nav.Link>*/}
+          {/* Área Común */}
+          <div
+            className="d-flex justify-content-between align-items-center py-2"
+            onClick={() => toggleMenu("areas")}
+            style={{ cursor: "pointer", fontWeight: "500", color: "#333" }}
+          >
+            Área Común{" "}
+            <FaChevronDown
+              className={`ms-2 ${menusOpen.areas ? "rotate-180" : ""}`}
+            />
+          </div>
+
+          <Collapse in={menusOpen.areas}>
+            <div>
+              <Nav.Link href="/areas-comunes" className="ps-4">
+                Áreas Comunes
+              </Nav.Link>
+              <Nav.Link className="ps-4">Reservar Área Común</Nav.Link>
+              <Nav.Link className="ps-4">Historial de Reservas</Nav.Link>
+              <Nav.Link className="ps-4">
+                Horarios Disp. de Áreas Comunes
+              </Nav.Link>
+            </div>
+          </Collapse>
+
           <Nav.Link href="/reportes">Reportes</Nav.Link>
         </Nav>
       </div>
@@ -94,42 +131,77 @@ function Sidebar() {
               Dashboard
             </Nav.Link>
 
+            {/* Administración */}
             <div
               className="d-flex justify-content-between align-items-center py-2"
-              onClick={toggleSubmenu}
+              onClick={() => toggleMenu("admin")}
               style={{ cursor: "pointer", fontWeight: "500", color: "#333" }}
             >
-              Menú{" "}
+              Administración{" "}
               <FaChevronDown
-                className={`ms-2 ${submenuOpen ? "rotate-180" : ""}`}
+                className={`ms-2 ${menusOpen.admin ? "rotate-180" : ""}`}
               />
             </div>
 
-            <Collapse in={submenuOpen}>
+            <Collapse in={menusOpen.admin}>
               <div>
                 <Nav.Link
-                  href="/submenu1"
+                  href="/usuarios"
                   className="ps-4"
                   onClick={handleClose}
                 >
-                  Submenú 1
+                  Usuarios
                 </Nav.Link>
                 <Nav.Link
-                  href="/submenu2"
+                  href="/condominios"
                   className="ps-4"
                   onClick={handleClose}
                 >
-                  Submenú 2
+                  Condominios
+                </Nav.Link>
+                <Nav.Link
+                  href="/unidades"
+                  className="ps-4"
+                  onClick={handleClose}
+                >
+                  Unidad Habitacional
                 </Nav.Link>
               </div>
             </Collapse>
 
-            <Nav.Link href="/usuarios" onClick={handleClose}>
-              Usuarios
-            </Nav.Link>
-            <Nav.Link href="/condominios" onClick={handleClose}>
-              Condominios
-            </Nav.Link>
+            {/* Área Común */}
+            <div
+              className="d-flex justify-content-between align-items-center py-2"
+              onClick={() => toggleMenu("areas")}
+              style={{ cursor: "pointer", fontWeight: "500", color: "#333" }}
+            >
+              Área Común{" "}
+              <FaChevronDown
+                className={`ms-2 ${menusOpen.areas ? "rotate-180" : ""}`}
+              />
+            </div>
+
+            <Collapse in={menusOpen.areas}>
+              <div>
+                <Nav.Link
+                  href="/areas-comunes"
+                  className="ps-4"
+                  onClick={handleClose}
+                >
+                  Áreas Comunes
+                </Nav.Link>
+                <Nav.Link className="ps-4" onClick={handleClose}>
+                  Reservar Área Común
+                </Nav.Link>
+                <Nav.Link className="ps-4" onClick={handleClose}>
+                  Historial de Reservas
+                </Nav.Link>
+                <Nav.Link className="ps-4" onClick={handleClose}>
+                  Horarios Disp. de Áreas Comunes
+                </Nav.Link>
+              </div>
+            </Collapse>
+
             <Nav.Link href="/reportes" onClick={handleClose}>
               Reportes
             </Nav.Link>
