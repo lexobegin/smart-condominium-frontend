@@ -26,6 +26,16 @@ import CondominioForm from "./pages/condominio/CondominiosForm";
 import UnidadHabitacional from "./pages/UnidadHabitacional/UnidadHabitacional";
 import UnidadForm from "./pages/UnidadHabitacional/UnidadForm";
 
+// Categorias Mantenimiento
+import CategoriaListar from "./pages/categorias-mantenimiento/CategoriaListar";
+import CategoriaCrear from "./pages/categorias-mantenimiento/CategoriaCrear";
+import CategoriaEditar from "./pages/categorias-mantenimiento/CategoriaEditar";
+
+// Mantenimientos Preventivos
+import MantenimientoListar from "./pages/mantenimientos-preventivos/MantenimientoListar";
+import MantenimientoCrear from "./pages/mantenimientos-preventivos/MantenimientoCrear";
+import MantenimientoEditar from "./pages/mantenimientos-preventivos/MantenimientoEditar";
+
 function App() {
   return (
     <BrowserRouter>
@@ -157,6 +167,60 @@ function App() {
           element={
             <ProtectedRoute>
               <Editar />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/categorias-mantenimiento"
+          element={
+            <ProtectedRoute>
+              <CategoriaListar />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/categorias-mantenimiento/crear"
+          element={
+            <ProtectedRoute>
+              <CategoriaCrear />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/categorias-mantenimiento/editar/:id"
+          element={
+            <ProtectedRoute>
+              <CategoriaEditar />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/mantenimientos-preventivos"
+          element={
+            <ProtectedRoute>
+              <MantenimientoListar />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/mantenimiento-preventivo/crear"
+          element={
+            <ProtectedRoute>
+              <MantenimientoCrear />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/mantenimiento-preventivo/editar/:id"
+          element={
+            <ProtectedRoute>
+              <MantenimientoEditar />
             </ProtectedRoute>
           }
         />

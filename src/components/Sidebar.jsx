@@ -110,6 +110,30 @@ function Sidebar() {
             </div>
           </Collapse>
 
+          {/* Mantenimiento */}
+          <div
+            className="d-flex justify-content-between align-items-center py-2"
+            onClick={() => toggleMenu("mantenimientos")}
+            style={{ cursor: "pointer", fontWeight: "500", color: "#333" }}
+          >
+            Mantenimiento{" "}
+            <FaChevronDown
+              className={`ms-2 ${menusOpen.mantenimientos ? "rotate-180" : ""}`}
+            />
+          </div>
+
+          <Collapse in={menusOpen.mantenimientos}>
+            <div>
+              <Nav.Link href="/categorias-mantenimiento" className="ps-4">Categorias Mantenimiento</Nav.Link>
+              <Nav.Link href="/mantenimientos-preventivos" className="ps-4">Mantenimiento Preventivo y Correctivo</Nav.Link>
+              <Nav.Link className="ps-4">Asignar Tareas de Mantenimiento</Nav.Link>
+              <Nav.Link className="ps-4">Consultar Tareas Asignadas</Nav.Link>
+              <Nav.Link className="ps-4">
+                Actualizar Estado de Tareas
+              </Nav.Link>
+            </div>
+          </Collapse>
+
           <Nav.Link href="/reportes">Reportes</Nav.Link>
         </Nav>
       </div>
