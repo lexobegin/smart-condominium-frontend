@@ -12,9 +12,11 @@ import RedirectToInitial from "./components/RedirectToInitial";
 import Usuarios from "./pages/usuario/Usuarios";
 import UsuarioForm from "./pages/usuario/UsuarioForm";
 
+// Areas Comunes
 import Listar from "./pages/areas-comunes/Listar";
 import Crear from "./pages/areas-comunes/Crear";
 import Editar from "./pages/areas-comunes/Editar";
+import Ver from "./pages/areas-comunes/Ver";
 
 // Condominios
 import Condominios from "./pages/condominio/Condominios_TEMP";
@@ -122,6 +124,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        {/* Areas Comunes */}
         <Route
           path="/areas-comunes"
           element={
@@ -136,6 +139,15 @@ function App() {
           element={
             <ProtectedRoute>
               <Crear />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/areas-comunes/:id"
+          element={
+            <ProtectedRoute>
+              <Ver />
             </ProtectedRoute>
           }
         />

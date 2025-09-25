@@ -14,7 +14,7 @@ function Crear() {
     horario_cierre: "",
     precio_por_hora: "",
     reglas_uso: "",
-    requiere_aprobacion: false,
+    requiere_aprobacion: true,
     condominio: "",
   });
 
@@ -37,20 +37,44 @@ function Crear() {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setForm({
-      ...form,
-      [name]: type === "checkbox" ? checked : value,
-    });
+
+    let newValue = type === "checkbox" ? checked : value;
+
+    // Validar que capacidad y precio no sean negativos
+    if (
+      (name === "capacidad" || name === "precio_por_hora") &&
+      parseFloat(newValue) < 0
+    ) {
+      newValue = "0";
+    }
+
+    setForm((prevForm) => ({
+      ...prevForm,
+      [name]: newValue,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setSaving(true);
-      await createAreaComun(form);
+
+      const payload = {
+        ...form,
+        capacidad: parseInt(form.capacidad, 10),
+        precio_por_hora: parseFloat(form.precio_por_hora),
+        condominio_id: parseInt(form.condominio, 10),
+      };
+
+      delete payload.condominio; // Eliminar campo no usado por el backend
+
+      console.log("Payload final corregido:", payload);
+
+      await createAreaComun(payload);
       navigate("/areas-comunes");
     } catch (err) {
       console.error("Error al crear área común:", err);
+      console.error("Respuesta del backend:", err.response?.data);
       alert("Ocurrió un error al guardar");
     } finally {
       setSaving(false);
@@ -94,6 +118,7 @@ function Crear() {
               <Form.Control
                 name="capacidad"
                 type="number"
+                min="0"
                 value={form.capacidad}
                 onChange={handleChange}
                 required
@@ -127,20 +152,21 @@ function Crear() {
         </Row>
         {/* Línea 3: Precio por Hora y Reglas de Uso */}
         <Row className="mb-3">
-          <Col md={6}>
+          <Col md={4}>
             <Form.Group>
               <Form.Label>Precio por hora</Form.Label>
               <Form.Control
                 name="precio_por_hora"
                 type="number"
                 step="0.01"
+                min="0"
                 value={form.precio_por_hora}
                 onChange={handleChange}
                 required
               />
             </Form.Group>
           </Col>
-          <Col md={6}>
+          <Col md={8}>
             <Form.Group>
               <Form.Label>Reglas de uso</Form.Label>
               <Form.Control
@@ -153,18 +179,7 @@ function Crear() {
           </Col>
         </Row>
         {/* Línea 4: Requiere Aprobación y Condominio */}
-        <Row className="mb-3">
-          <Col md={6}>
-            <Form.Group>
-              <Form.Check
-                type="checkbox"
-                label="Requiere aprobación"
-                name="requiere_aprobacion"
-                checked={form.requiere_aprobacion}
-                onChange={handleChange}
-              />
-            </Form.Group>
-          </Col>
+        <Row className="mb-4">
           <Col md={6}>
             <Form.Group>
               <Form.Label>Condominio</Form.Label>
@@ -181,6 +196,18 @@ function Crear() {
                   </option>
                 ))}
               </Form.Select>
+            </Form.Group>
+          </Col>
+          <Col md={6} className="d-flex align-items-end">
+            <Form.Group className="ms-2">
+              <Form.Check
+                type="switch"
+                id="requiere_aprobacion"
+                label="Requiere aprobación"
+                name="requiere_aprobacion"
+                checked={form.requiere_aprobacion}
+                onChange={handleChange}
+              />
             </Form.Group>
           </Col>
         </Row>
