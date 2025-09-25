@@ -125,8 +125,9 @@ function Sidebar() {
           <Collapse in={menusOpen.mantenimientos}>
             <div>
               <Nav.Link href="/categorias-mantenimiento" className="ps-4">Categorias Mantenimiento</Nav.Link>
-              <Nav.Link href="/mantenimientos-preventivos" className="ps-4">Mantenimiento Preventivo y Correctivo</Nav.Link>
-              <Nav.Link className="ps-4">Asignar Tareas de Mantenimiento</Nav.Link>
+              <Nav.Link href="/mantenimientos-preventivos" className="ps-4">Mantenimiento Preventivo</Nav.Link>
+              <Nav.Link href="/solicitudes-mantenimientos" className="ps-4">Mantenimiento Correctivo</Nav.Link>
+              <Nav.Link href="/tareas-mantenimientos" className="ps-4">Asignar Tareas de Mantenimiento</Nav.Link>
               <Nav.Link className="ps-4">Consultar Tareas Asignadas</Nav.Link>
               <Nav.Link className="ps-4">
                 Actualizar Estado de Tareas

@@ -36,6 +36,17 @@ import MantenimientoListar from "./pages/mantenimientos-preventivos/Mantenimient
 import MantenimientoCrear from "./pages/mantenimientos-preventivos/MantenimientoCrear";
 import MantenimientoEditar from "./pages/mantenimientos-preventivos/MantenimientoEditar";
 
+// Tareas Mantenimiento
+import TareaListar from "./pages/tareas-mantenimiento/TareaListar";
+import TareaCrear from "./pages/tareas-mantenimiento/TareaCrear";
+import TareaEditar from "./pages/tareas-mantenimiento/TareaEditar";
+
+// Solicitudes Mantenimiento
+import SolicitudListar from "./pages/solicitudes-mantenimiento/SolicitudListar";
+import SolicitudCrear from "./pages/solicitudes-mantenimiento/SolicitudCrear";
+import SolicitudEditar from "./pages/solicitudes-mantenimiento/SolicitudEditar";
+
+
 function App() {
   return (
     <BrowserRouter>
@@ -224,6 +235,61 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/tareas-mantenimientos"
+          element={
+            <ProtectedRoute>
+              <TareaListar />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tareas-mantenimiento/crear"
+          element={
+            <ProtectedRoute>
+              <TareaCrear />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tareas-mantenimiento/editar/:id"
+          element={
+            <ProtectedRoute>
+              <TareaEditar />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/solicitudes-mantenimientos"
+          element={
+            <ProtectedRoute>
+              <SolicitudListar />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/solicitud-mantenimiento/crear"
+          element={
+            <ProtectedRoute>
+              <SolicitudCrear />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/solicitud-mantenimiento/editar/:id"
+          element={
+            <ProtectedRoute>
+              <SolicitudEditar />
+            </ProtectedRoute>
+          }
+        />
+
       </Routes>
     </BrowserRouter>
   );

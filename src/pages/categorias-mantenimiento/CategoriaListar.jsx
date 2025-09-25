@@ -71,7 +71,7 @@ function Listar() {
           onClick={() => navigate("/categorias-mantenimiento/crear")}
           variant="success"
         >
-          Nueva Categoría
+          Nueva Categoría de Mantenimiento
         </Button>
       </div>
 
