@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Spinner } from "react-bootstrap";
+import { Table, Button, Spinner, Modal } from "react-bootstrap";
 import {
   fetchCategoriasMantenimientos,
   deleteCategoriaMantenimiento,
 } from "../../services/categorias-mantenimiento";
+import { fetchCondominio } from "../../services/condominios";
 import DashboardLayout from "../../components/DashboardLayout";
 import { useNavigate } from "react-router-dom";
-import {fetchCondominio} from "../../services/condominios";
-import { Modal } from "react-bootstrap";
 
 function Listar() {
   const [categorias, setCategorias] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const navigate = useNavigate();
   const [condominio, setCondominio] = useState(null);
   const [showModal, setShowModal] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadCategorias(currentPage);
@@ -27,18 +27,18 @@ function Listar() {
       setLoading(true);
       const data = await fetchCategoriasMantenimientos(page);
       setCategorias(data.results);
-      const total = Math.ceil(data.count / 10);
-      setTotalPages(total);
+      setTotalPages(Math.ceil(data.count / 10));
     } catch (err) {
-      console.error("Error cargando áreas comunes:", err);
+      console.error("Error cargando categorías:", err);
+      alert("No se pudieron cargar las categorías.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleViewCondominio = async (id) => {
+  const handleViewCondominio = async (idCondominio) => {
     try {
-      const data = await fetchCondominio(id);
+      const data = await fetchCondominio(idCondominio);
       setCondominio(data);
       setShowModal(true);
     } catch (err) {
@@ -47,30 +47,31 @@ function Listar() {
     }
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setCondominio(null);
+  };
 
   const handleDelete = async (id) => {
-    if (
-      !window.confirm("¿Estás seguro de que quieres eliminar esta categoria de mantenimiento?")
-    )
-      return;
+    if (!window.confirm("¿Estás seguro de que quieres eliminar esta categoría de mantenimiento?")) return;
     try {
       await deleteCategoriaMantenimiento(id);
-      navigate("/categorias-mantenimiento");
+      loadCategorias(currentPage); // Recarga la lista sin navegar
     } catch (err) {
-      console.error("Error eliminando:", err);
-      alert("Error al eliminar");
+      console.error("Error eliminando categoría:", err);
+      alert("No se pudo eliminar la categoría.");
     }
   };
 
   return (
     <DashboardLayout>
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2>Categorias Mantenimiento</h2>
+        <h2>Categorías de Mantenimiento</h2>
         <Button
           onClick={() => navigate("/categorias-mantenimiento/crear")}
           variant="success"
         >
-          Nueva Categoria Mantenimiento
+          Nueva Categoría
         </Button>
       </div>
 
@@ -83,61 +84,37 @@ function Listar() {
               <tr>
                 <th>ID</th>
                 <th>Nombre</th>
-                <th>Descripcion</th>
+                <th>Descripción</th>
                 <th>Condominio</th>
+                <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
-              {categorias.map((categoria) => (
-                <tr key={categoria.id}>
-                  <td>{categoria.id}</td>
-                  <td>{categoria.nombre}</td>
-                  <td>{categoria.descripcion}</td>
-                  <td>
-                      <Button
-                        size="sm"
-                        variant="info"
-                        onClick={() => handleViewCondominio(categoria.condominio)}
-                      >
-                        Ver Detalle
-                      </Button>
-                  </td>
-                  {/* Modal de ver detalle */}
-                    <Modal show={showModal} onHide={() => setShowModal(false)} backdrop={false} centered>
-                    <Modal.Header closeButton>
-                      <Modal.Title>Detalle Condominio</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                      {condominio ? (
-                        <>
-                          <p><strong>Nombre:</strong> {condominio.nombre}</p>
-                          <p><strong>Dirección:</strong> {condominio.direccion}</p>
-                          <p><strong>Teléfono:</strong> {condominio.telefono}</p>
-                          {/* Agrega más campos según tu modelo */}
-                        </>
-                      ) : (
-                        <p>Cargando...</p>
-                      )}
-                    </Modal.Body>
-                    <Modal.Footer>
-                      <Button variant="secondary" onClick={() => setShowModal(false)}>
-                        Cerrar
-                      </Button>
-                    </Modal.Footer>
-                  </Modal>
+              {categorias.map((cat) => (
+                <tr key={cat.id}>
+                  <td>{cat.id}</td>
+                  <td>{cat.nombre}</td>
+                  <td>{cat.descripcion}</td>
                   <td>
                     <Button
                       size="sm"
-                      onClick={() =>
-                        navigate(`/categorias-mantenimiento/editar/${categoria.id}`)
-                      }
+                      variant="info"
+                      onClick={() => handleViewCondominio(cat.condominio)}
+                    >
+                      Ver Detalle
+                    </Button>
+                  </td>
+                  <td>
+                    <Button
+                      size="sm"
+                      onClick={() => navigate(`/categorias-mantenimiento/editar/${cat.id}`)}
                     >
                       Editar
                     </Button>{" "}
                     <Button
                       size="sm"
                       variant="danger"
-                      onClick={() => handleDelete(categoria.id)}
+                      onClick={() => handleDelete(cat.id)}
                     >
                       Eliminar
                     </Button>
@@ -146,6 +123,7 @@ function Listar() {
               ))}
             </tbody>
           </Table>
+
           {totalPages > 1 && (
             <div className="d-flex justify-content-between align-items-center mt-3">
               <span>
@@ -171,6 +149,34 @@ function Listar() {
               </div>
             </div>
           )}
+
+          {/* Modal para ver detalle del condominio */}
+          <Modal
+            show={showModal}
+            onHide={handleCloseModal}
+            backdrop={true} // permite cerrar al click fuera
+            centered
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Detalle Condominio</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {condominio ? (
+                <>
+                  <p><strong>Nombre:</strong> {condominio.nombre}</p>
+                  <p><strong>Dirección:</strong> {condominio.direccion}</p>
+                  <p><strong>Teléfono:</strong> {condominio.telefono}</p>
+                </>
+              ) : (
+                <p>Cargando...</p>
+              )}
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleCloseModal}>
+                Cerrar
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </>
       )}
     </DashboardLayout>
