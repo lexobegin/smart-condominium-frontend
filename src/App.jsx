@@ -12,7 +12,7 @@ import RedirectToInitial from "./components/RedirectToInitial";
 import Usuarios from "./pages/usuario/Usuarios";
 import UsuarioForm from "./pages/usuario/UsuarioForm";
 
-// Areas Comunes
+// Áreas comunes
 import Listar from "./pages/areas-comunes/Listar";
 import Crear from "./pages/areas-comunes/Crear";
 import Editar from "./pages/areas-comunes/Editar";
@@ -26,7 +26,7 @@ import CondominioForm from "./pages/condominio/CondominiosForm";
 import UnidadHabitacional from "./pages/UnidadHabitacional/UnidadHabitacional";
 import UnidadForm from "./pages/UnidadHabitacional/UnidadForm";
 
-// Categorias Mantenimiento
+// Categorías Mantenimiento
 import CategoriaListar from "./pages/categorias-mantenimiento/CategoriaListar";
 import CategoriaCrear from "./pages/categorias-mantenimiento/CategoriaCrear";
 import CategoriaEditar from "./pages/categorias-mantenimiento/CategoriaEditar";
@@ -48,6 +48,8 @@ import SolicitudListar from "./pages/solicitudes-mantenimiento/SolicitudListar";
 import SolicitudCrear from "./pages/solicitudes-mantenimiento/SolicitudCrear";
 import SolicitudEditar from "./pages/solicitudes-mantenimiento/SolicitudEditar";
 
+// Bitácora
+import Bitacora from "./pages/bitacora/Bitacora";
 
 function App() {
   return (
@@ -147,7 +149,8 @@ function App() {
             </ProtectedRoute>
           }
         />
-        {/* Areas Comunes */}
+
+        {/* Áreas comunes */}
         <Route
           path="/areas-comunes"
           element={
@@ -156,7 +159,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/areas-comunes/crear"
           element={
@@ -165,7 +167,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/areas-comunes/:id"
           element={
@@ -174,7 +175,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/areas-comunes/editar/:id"
           element={
@@ -184,6 +184,7 @@ function App() {
           }
         />
 
+        {/* Categorías Mantenimiento */}
         <Route
           path="/categorias-mantenimiento"
           element={
@@ -192,7 +193,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/categorias-mantenimiento/crear"
           element={
@@ -201,7 +201,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/categorias-mantenimiento/editar/:id"
           element={
@@ -211,15 +210,7 @@ function App() {
           }
         />
 
-        {/* <Route
-          path="/categorias-mantenimiento/:id"
-          element={
-            <ProtectedRoute>
-              <CategoriaVer />
-            </ProtectedRoute>
-          }
-        /> */}
-
+        {/* Mantenimientos Preventivos */}
         <Route
           path="/mantenimientos-preventivos"
           element={
@@ -228,7 +219,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/mantenimiento-preventivo/crear"
           element={
@@ -237,7 +227,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/mantenimiento-preventivo/editar/:id"
           element={
@@ -247,6 +236,7 @@ function App() {
           }
         />
 
+        {/* Tareas Mantenimiento */}
         <Route
           path="/tareas-mantenimientos"
           element={
@@ -255,7 +245,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/tareas-asignadas"
           element={
@@ -264,7 +253,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/tareas-mantenimiento/crear"
           element={
@@ -273,7 +261,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/tareas-mantenimiento/editar/:id"
           element={
@@ -283,6 +270,7 @@ function App() {
           }
         />
 
+        {/* Solicitudes Mantenimiento */}
         <Route
           path="/solicitudes-mantenimientos"
           element={
@@ -291,7 +279,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/solicitud-mantenimiento/crear"
           element={
@@ -300,7 +287,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/solicitud-mantenimiento/editar/:id"
           element={
@@ -310,6 +296,15 @@ function App() {
           }
         />
 
+        {/* Bitácora */}
+        <Route
+          path="/admin/bitacora"
+          element={
+            <ProtectedRoute>
+              <Bitacora />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

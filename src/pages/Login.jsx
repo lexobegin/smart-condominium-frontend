@@ -8,7 +8,7 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
-import api from "../services/axios";
+import api from "../services/api"; // <-- corregido el import
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -17,13 +17,22 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError(false);
     try {
-      const res = await api.post("/token/", { email, password });
-      localStorage.setItem("token", res.data.access);
+      // 🔹 Usar /auth/login/ para que registre en Bitácora
+      const res = await api.post("/auth/login/", { email, password });
 
-      // 🔹 Guardar usuario en localStorage (simple con email)
-      localStorage.setItem("user", JSON.stringify({ email }));
-      console.log("Usuario guardado en localStorage:", { email });
+      // 🔹 Guardamos tokens y usuario
+      localStorage.setItem("token", res.data.access);    // access
+      localStorage.setItem("refresh", res.data.refresh); // refresh
+
+      if (res.data.usuario) {
+        localStorage.setItem("user", JSON.stringify(res.data.usuario));
+      } else {
+        // fallback simple con email si no viene usuario
+        localStorage.setItem("user", JSON.stringify({ email }));
+      }
+
       window.location.href = "/dashboard";
     } catch (err) {
       console.error(err.response?.data || err.message);

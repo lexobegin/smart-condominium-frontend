@@ -69,7 +69,14 @@ function Sidebar() {
 
           <Collapse in={menusOpen.admin}>
             <div>
-              <Nav.Link className="ps-4">Role y Permiso</Nav.Link>
+              {/* NUEVO: Roles y Permisos + Bitácora */}
+              <Nav.Link href="/admin/roles" className="ps-4">
+                Role y Permiso
+              </Nav.Link>
+              <Nav.Link href="/admin/bitacora" className="ps-4">
+                Bitácora
+              </Nav.Link>
+
               <Nav.Link href="/usuarios" className="ps-4">
                 Usuarios
               </Nav.Link>
@@ -170,6 +177,22 @@ function Sidebar() {
 
             <Collapse in={menusOpen.admin}>
               <div>
+                {/* NUEVO: Roles y Permisos + Bitácora */}
+                <Nav.Link
+                  href="/admin/roles"
+                  className="ps-4"
+                  onClick={handleClose}
+                >
+                  Role y Permiso
+                </Nav.Link>
+                <Nav.Link
+                  href="/admin/bitacora"
+                  className="ps-4"
+                  onClick={handleClose}
+                >
+                  Bitácora
+                </Nav.Link>
+
                 <Nav.Link
                   href="/usuarios"
                   className="ps-4"
