@@ -30,6 +30,7 @@ import UnidadForm from "./pages/UnidadHabitacional/UnidadForm";
 import CategoriaListar from "./pages/categorias-mantenimiento/CategoriaListar";
 import CategoriaCrear from "./pages/categorias-mantenimiento/CategoriaCrear";
 import CategoriaEditar from "./pages/categorias-mantenimiento/CategoriaEditar";
+// import CategoriaVer from "./pages/categorias-mantenimiento/CategoriaVer";
 
 // Mantenimientos Preventivos
 import MantenimientoListar from "./pages/mantenimientos-preventivos/MantenimientoListar";
@@ -208,6 +209,15 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* <Route
+          path="/categorias-mantenimiento/:id"
+          element={
+            <ProtectedRoute>
+              <CategoriaVer />
+            </ProtectedRoute>
+          }
+        /> */}
 
         <Route
           path="/mantenimientos-preventivos"

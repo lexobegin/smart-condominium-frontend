@@ -5,13 +5,7 @@ import {
   deleteCategoriaMantenimiento,
 } from "../../services/categorias-mantenimiento";
 import DashboardLayout from "../../components/DashboardLayout";
-import {
-  Button,
-  Card,
-  Spinner,
-  Table,
-  Modal,
-} from "react-bootstrap";
+import { Button, Card, Spinner, Table, Modal } from "react-bootstrap";
 import { FaListAlt, FaFileAlt } from "react-icons/fa";
 
 function Listar() {
@@ -25,7 +19,6 @@ function Listar() {
   // Modals
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedCategoriaId, setSelectedCategoriaId] = useState(null);
-
   const [showModal, setShowModal] = useState(false);
   const [selectedCategoria, setSelectedCategoria] = useState(null);
 
@@ -89,7 +82,7 @@ function Listar() {
           onClick={() => navigate("/categorias-mantenimiento/crear")}
           variant="success"
         >
-          Nueva Categoría Mantenimiento
+          Nueva Categoría
         </Button>
       </div>
 

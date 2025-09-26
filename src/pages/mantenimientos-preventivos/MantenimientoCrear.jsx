@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button, Spinner } from "react-bootstrap";
+import Select from "react-select";
 import { createMantenimientoPreventivo } from "../../services/mantenimiento-preventivo";
 import { fetchCategoriasMantenimientos } from "../../services/categorias-mantenimiento";
 import { fetchAreasComunes } from "../../services/areas-comunes";
@@ -95,53 +96,62 @@ function CrearMantenimiento() {
 
         <Form.Group className="mb-3">
           <Form.Label>Responsable</Form.Label>
-          <Form.Select
-            name="responsable"
-            value={form.responsable}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Seleccione un usuario</option>
-            {usuarios.map((u) => (
-              <option key={u.id} value={u.id}>
-                {u.nombre} {u.apellidos}
-              </option>
-            ))}
-          </Form.Select>
+          <Select
+            options={usuarios.map((u) => ({
+              value: u.id,
+              label: `${u.nombre} ${u.apellidos}`,
+            }))}
+            value={
+              usuarios.find((u) => u.id === form.responsable)
+                ? {
+                    value: form.responsable,
+                    label: `${usuarios.find((u) => u.id === form.responsable).nombre} ${usuarios.find((u) => u.id === form.responsable).apellidos}`,
+                  }
+                : null
+            }
+            onChange={(selected) =>
+              setForm((prev) => ({ ...prev, responsable: selected.value }))
+            }
+            placeholder="Seleccione un usuario..."
+            isSearchable
+            menuPlacement="auto"
+          />
         </Form.Group>
 
         <Form.Group className="mb-3">
           <Form.Label>Área Común</Form.Label>
-          <Form.Select
-            name="area_comun"
-            value={form.area_comun}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Seleccione un área común</option>
-            {areas.map((a) => (
-              <option key={a.id} value={a.id}>
-                {a.nombre}
-              </option>
-            ))}
-          </Form.Select>
+          <Select
+            options={areas.map((a) => ({ value: a.id, label: a.nombre }))}
+            value={
+              areas.find((a) => a.id === form.area_comun)
+                ? { value: form.area_comun, label: areas.find((a) => a.id === form.area_comun).nombre }
+                : null
+            }
+            onChange={(selected) =>
+              setForm((prev) => ({ ...prev, area_comun: selected.value }))
+            }
+            placeholder="Seleccione un área común..."
+            isSearchable
+            menuPlacement="auto"
+          />
         </Form.Group>
 
         <Form.Group className="mb-3">
           <Form.Label>Categoría de Mantenimiento</Form.Label>
-          <Form.Select
-            name="categoria_mantenimiento"
-            value={form.categoria_mantenimiento}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Seleccione una categoría</option>
-            {categorias.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.nombre}
-              </option>
-            ))}
-          </Form.Select>
+          <Select
+            options={categorias.map((c) => ({ value: c.id, label: c.nombre }))}
+            value={
+              categorias.find((c) => c.id === form.categoria_mantenimiento)
+                ? { value: form.categoria_mantenimiento, label: categorias.find((c) => c.id === form.categoria_mantenimiento).nombre }
+                : null
+            }
+            onChange={(selected) =>
+              setForm((prev) => ({ ...prev, categoria_mantenimiento: selected.value }))
+            }
+            placeholder="Seleccione una categoría..."
+            isSearchable
+            menuPlacement="auto"
+          />
         </Form.Group>
 
         <Button type="submit" disabled={saving}>

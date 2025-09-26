@@ -1,83 +1,98 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Spinner, Modal } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import {
   fetchMantenimientosPreventivos,
   deleteMantenimientoPreventivo,
 } from "../../services/mantenimiento-preventivo";
-import DashboardLayout from "../../components/DashboardLayout";
-import { useNavigate } from "react-router-dom";
-import { fetchCategoriaMantenimiento } from "../../services/categorias-mantenimiento";
+import {
+  fetchCategoriaMantenimiento,
+} from "../../services/categorias-mantenimiento";
 import { fetchAreaComun } from "../../services/areas-comunes";
 import { fetchUser } from "../../services/users";
+import DashboardLayout from "../../components/DashboardLayout";
+import { Button, Card, Spinner, Table, Modal } from "react-bootstrap";
+import { FaListAlt, FaFileAlt } from "react-icons/fa";
 
 function Listar() {
+  const navigate = useNavigate();
   const [mantenimientos, setMantenimientos] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const [categoria, setCategoria] = useState(null);
-  const [usuario, setUsuario] = useState(null);
-  const [areaComun, setAreaComun] = useState(null);
+  // Modals
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedMantenimientoId, setSelectedMantenimientoId] = useState(null);
+
   const [showModal, setShowModal] = useState(false);
+  const [detalle, setDetalle] = useState({
+    categoria: null,
+    usuario: null,
+    areaComun: null,
+  });
 
-  useEffect(() => {
-    loadMantenimientos(currentPage);
-  }, [currentPage]);
-
-  const loadMantenimientos = async (page) => {
+  // Cargar mantenimientos con búsqueda y paginación
+  const loadMantenimientos = async (page, search = "") => {
     try {
       setLoading(true);
-      const data = await fetchMantenimientosPreventivos(page);
+      const data = await fetchMantenimientosPreventivos(page, search);
       setMantenimientos(data.results);
       setTotalPages(Math.ceil(data.count / 10));
     } catch (err) {
       console.error("Error cargando mantenimientos preventivos:", err);
+      alert("No se pudieron cargar los mantenimientos preventivos.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleViewInformaciones = async (idCategoria, idUsuario, idAreaComun) => {
-    if (!idCategoria || !idUsuario || !idAreaComun) {
-      alert("Faltan datos para mostrar la información");
-      return;
-    }
+  useEffect(() => {
+    loadMantenimientos(currentPage, searchTerm);
+  }, [currentPage, searchTerm]);
 
+  // Modal handlers - eliminar
+  const handleShowDeleteModal = (id) => {
+    setSelectedMantenimientoId(id);
+    setShowDeleteModal(true);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setSelectedMantenimientoId(null);
+    setShowDeleteModal(false);
+  };
+
+  const confirmDelete = async () => {
     try {
-      const [dataCategoria, dataArea, dataUsuario] = await Promise.all([
-        fetchCategoriaMantenimiento(idCategoria),
-        fetchAreaComun(idAreaComun),
-        fetchUser(idUsuario),
-      ]);
+      await deleteMantenimientoPreventivo(selectedMantenimientoId);
+      loadMantenimientos(currentPage, searchTerm);
+    } catch (err) {
+      console.error("Error eliminando mantenimiento preventivo:", err);
+      alert("No se pudo eliminar el mantenimiento preventivo.");
+    } finally {
+      handleCloseDeleteModal();
+    }
+  };
 
-      setCategoria(dataCategoria);
-      setAreaComun(dataArea);
-      setUsuario(dataUsuario);
+  // Modal handlers - ver detalle
+  const handleView = async (m) => {
+    try {
+      const [cat, area, user] = await Promise.all([
+        fetchCategoriaMantenimiento(m.categoria_mantenimiento),
+        fetchAreaComun(m.area_comun),
+        fetchUser(m.responsable),
+      ]);
+      setDetalle({ categoria: cat, areaComun: area, usuario: user });
       setShowModal(true);
     } catch (err) {
-      console.error("Error cargando información:", err);
-      alert("No se pudo cargar la información completa");
+      console.error("Error cargando detalle:", err);
+      alert("No se pudo cargar el detalle completo.");
     }
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
-    setCategoria(null);
-    setUsuario(null);
-    setAreaComun(null);
-  };
-
-  const handleDelete = async (id) => {
-    if (!window.confirm("¿Seguro quieres eliminar este mantenimiento preventivo?")) return;
-    try {
-      await deleteMantenimientoPreventivo(id);
-      loadMantenimientos(currentPage);
-    } catch (err) {
-      console.error("Error eliminando:", err);
-      alert("Error al eliminar");
-    }
+    setDetalle({ categoria: null, usuario: null, areaComun: null });
   };
 
   return (
@@ -92,6 +107,20 @@ function Listar() {
         </Button>
       </div>
 
+      {/* Buscador */}
+      <div className="mb-3">
+        <input
+          type="text"
+          placeholder="Buscar por descripción"
+          className="form-control"
+          value={searchTerm}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            setCurrentPage(1);
+          }}
+        />
+      </div>
+
       {loading ? (
         <Spinner animation="border" />
       ) : (
@@ -104,7 +133,6 @@ function Listar() {
                 <th>Periodicidad</th>
                 <th>Última Ejecución</th>
                 <th>Próxima Ejecución</th>
-                <th>Informaciones</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -117,21 +145,9 @@ function Listar() {
                   <td>{m.ultima_ejecucion}</td>
                   <td>{m.proxima_ejecucion}</td>
                   <td>
-                    <Button
-                      size="sm"
-                      variant="info"
-                      onClick={() =>
-                        handleViewInformaciones(
-                          m.categoria_mantenimiento,
-                          m.responsable,
-                          m.area_comun
-                        )
-                      }
-                    >
+                    <Button className="me-2" size="sm" variant="info" onClick={() => handleView(m)}>
                       Ver Detalle
                     </Button>
-                  </td>
-                  <td>
                     <Button
                       size="sm"
                       onClick={() =>
@@ -143,7 +159,7 @@ function Listar() {
                     <Button
                       size="sm"
                       variant="danger"
-                      onClick={() => handleDelete(m.id)}
+                      onClick={() => handleShowDeleteModal(m.id)}
                     >
                       Eliminar
                     </Button>
@@ -153,6 +169,7 @@ function Listar() {
             </tbody>
           </Table>
 
+          {/* Paginación */}
           {totalPages > 1 && (
             <div className="d-flex justify-content-between align-items-center mt-3">
               <span>
@@ -179,27 +196,39 @@ function Listar() {
             </div>
           )}
 
-          <Modal show={showModal} onHide={handleCloseModal} backdrop={true} centered>
-            <Modal.Header closeButton>
-              <Modal.Title>Detalle</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              {categoria && usuario && areaComun ? (
-                <>
-                  <p><strong>Nombre del Responsable:</strong> {usuario.nombre} {usuario.apellidos}</p>
-                  <p><strong>Nombre Area Comun:</strong> {areaComun.nombre}</p>
-                  <p><strong>Nombre Categoria:</strong> {categoria.nombre}</p>
-                </>
-              ) : (
-                <p>Cargando...</p>
-              )}
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleCloseModal}>
-                Cerrar
-              </Button>
-            </Modal.Footer>
-          </Modal>
+          {/* Modal detalle */}
+          {detalle.categoria && detalle.usuario && detalle.areaComun && (
+            <Modal show={showModal} onHide={handleCloseModal} centered size="lg">
+              <Modal.Header closeButton>
+                <Modal.Title>Detalle Mantenimiento Preventivo</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Card className="shadow-sm border-0">
+                  <Card.Body>
+                    <p>
+                      <FaListAlt className="me-2 text-primary" />
+                      <strong>ID Mantenimiento:</strong> {detalle.categoria.id}
+                    </p>
+                    <p>
+                      <FaFileAlt className="me-2 text-secondary" />
+                      <strong>Descripción Categoría:</strong> {detalle.categoria.descripcion}
+                    </p>
+                    <p>
+                      <strong>Responsable:</strong> {detalle.usuario.nombre} {detalle.usuario.apellidos}
+                    </p>
+                    <p>
+                      <strong>Área Común:</strong> {detalle.areaComun.nombre}
+                    </p>
+                  </Card.Body>
+                </Card>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={handleCloseModal}>
+                  Volver a la lista
+                </Button>
+              </Modal.Footer>
+            </Modal>
+          )}
         </>
       )}
     </DashboardLayout>
