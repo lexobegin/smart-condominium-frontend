@@ -206,8 +206,8 @@ Nueva Solicitud de Mantenimiento
                 <p><FaClipboardList className="me-2 text-secondary" /><strong>Descripción:</strong> {detalle.solicitud?.descripcion || "N/A"}</p>
                 <p><FaUser className="me-2 text-success" /><strong>Usuario Reporta:</strong> {detalle.usuario ? `${detalle.usuario.nombre} ${detalle.usuario.apellidos}` : "No disponible"}</p>
                 <p><FaCalendarAlt className="me-2 text-primary" /><strong>Fecha de Reporte:</strong> {detalle.solicitud?.fecha_reporte}</p>
-                <p><FaCalendarAlt className="me-2 text-secondary" /><strong>Fecha de Reporte:</strong> {detalle.solicitud?.fecha_limite}</p>
-                <p><FaCalendarAlt className="me-2 text-muted" /><strong>Fecha de Reporte:</strong> {detalle.solicitud?.fecha_completado}</p>
+                <p><FaCalendarAlt className="me-2 text-secondary" /><strong>Fecha Limite:</strong> {detalle.solicitud?.fecha_limite}</p>
+                <p><FaCalendarAlt className="me-2 text-muted" /><strong>Fecha Completado:</strong> {detalle.solicitud?.fecha_completado ? detalle.solicitud.fecha_completado : "No completado"}</p>
                 <p><FaBuilding className="me-2 text-dark" /><strong>Área Común:</strong> {detalle.areaComun ? detalle.areaComun.nombre : "No disponible"}</p>
                 <p><FaFolder className="me-2 text-info" /><strong>Categoría:</strong> {detalle.categoria ? detalle.categoria.nombre : "No disponible"}</p>
                 <p><FaHouseUser className="me-2 text-white" /><strong>Unidad Habitacional:</strong> {detalle.unidadHabitacional ? detalle.unidadHabitacional.nombre : "No disponible"}</p>

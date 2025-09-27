@@ -196,6 +196,24 @@ function Listar() {
             </div>
           )}
 
+          {/* Modal de confirmación */}
+          <Modal show={showDeleteModal} onHide={handleCloseDeleteModal} centered>
+            <Modal.Header closeButton>
+              <Modal.Title>Confirmar Eliminación</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              ¿Estás seguro de que quieres eliminar este mantenimiento preventivo?
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleCloseDeleteModal}>
+                Cancelar
+              </Button>
+              <Button variant="danger" onClick={confirmDelete}>
+                Eliminar
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
           {/* Modal detalle */}
           {detalle.categoria && detalle.usuario && detalle.areaComun && (
             <Modal show={showModal} onHide={handleCloseModal} centered size="lg">
