@@ -11,7 +11,16 @@ function UsuarioForm() {
     email: "",
     tipo: "",
     estado: "",
+    // solo creación:
+    ci: "",
+    password: "",
   });
+
+  // edición: cambiar contraseña (opcional)
+  const [changePwd, setChangePwd] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const navigate = useNavigate();
@@ -28,13 +37,19 @@ function UsuarioForm() {
     try {
       setLoading(true);
       const data = await fetchUser(id);
-      setForm({
+      setForm((prev) => ({
+        ...prev,
         nombre: data.nombre || "",
         apellidos: data.apellidos || "",
         email: data.email || "",
         tipo: data.tipo || "",
         estado: data.estado || "",
-      });
+        ci: data.ci || "",
+        password: "", // nunca rellenamos password
+      }));
+      setChangePwd(false);
+      setNewPassword("");
+      setConfirmPassword("");
     } catch (err) {
       console.error("Error cargando usuario:", err);
       alert("No se pudo cargar el usuario");
@@ -54,21 +69,54 @@ function UsuarioForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validaciones mínimas
+    if (!id) {
+      // Crear
+      if (!form.password || !form.ci) {
+        alert("CI y contraseña son obligatorios para crear un usuario.");
+        return;
+      }
+    } else {
+      // Editar con cambio de contraseña
+      if (changePwd) {
+        if (!newPassword) {
+          alert("Ingrese la nueva contraseña.");
+          return;
+        }
+        if (newPassword !== confirmPassword) {
+          alert("La confirmación de contraseña no coincide.");
+          return;
+        }
+      }
+    }
+
     try {
       setSaving(true);
 
       if (id) {
-        // UPDATE: enviar solo campos editables (email es read_only en tu serializer)
+        // UPDATE: enviar solo campos editables; email sigue read_only
         const payload = {
           nombre: form.nombre,
           apellidos: form.apellidos,
           tipo: form.tipo,
           estado: form.estado,
+          // si quieres permitir cambiar CI en edición, descomenta:
+          // ci: form.ci,
+          ...(changePwd && newPassword ? { password: newPassword } : {}),
         };
-        await updateUser(id, payload); // PATCH (ya ajustado en services/users.js)
+        await updateUser(id, payload); // PATCH
       } else {
-        // CREATE: usa UsuarioRegistroSerializer (si tu API exige más campos, agrégalos aquí)
-        await createUser(form);
+        // CREATE: backend exige password y ci
+        const payload = {
+          nombre: form.nombre,
+          apellidos: form.apellidos,
+          email: form.email,
+          tipo: form.tipo,
+          estado: form.estado,
+          ci: form.ci,
+          password: form.password,
+        };
+        await createUser(payload);
       }
 
       navigate("/usuarios");
@@ -129,6 +177,86 @@ function UsuarioForm() {
             />
           </Form.Group>
 
+          {/* Campos para CREAR */}
+          {!id && (
+            <>
+              <Form.Group className="mb-3">
+                <Form.Label>CI</Form.Label>
+                <Form.Control
+                  name="ci"
+                  value={form.ci}
+                  onChange={handleChange}
+                  required
+                  placeholder="Documento de identidad"
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label>Contraseña</Form.Label>
+                <Form.Control
+                  name="password"
+                  type="password"
+                  value={form.password}
+                  onChange={handleChange}
+                  required
+                  placeholder="Mínimo recomendado 8 caracteres"
+                />
+              </Form.Group>
+            </>
+          )}
+
+          {/* Opcional: cambio de contraseña en EDICIÓN */}
+          {!!id && (
+            <>
+              <Form.Check
+                className="form-switch mb-3"
+                type="switch"
+                id="changePwdSwitch"
+                label="Cambiar contraseña"
+                checked={changePwd}
+                onChange={(e) => {
+                  setChangePwd(e.target.checked);
+                  if (!e.target.checked) {
+                    setNewPassword("");
+                    setConfirmPassword("");
+                  }
+                }}
+              />
+
+              {changePwd && (
+                <>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Nueva contraseña</Form.Label>
+                    <Form.Control
+                      name="newPassword"
+                      type="password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder="Ingresa la nueva contraseña"
+                      required
+                    />
+                  </Form.Group>
+
+                  <Form.Group className="mb-4">
+                    <Form.Label>Confirmar contraseña</Form.Label>
+                    <Form.Control
+                      name="confirmPassword"
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="Repite la nueva contraseña"
+                      required
+                      isInvalid={confirmPassword && newPassword !== confirmPassword}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      Las contraseñas no coinciden.
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </>
+              )}
+            </>
+          )}
+
           <Form.Group className="mb-3">
             <Form.Label>Tipo</Form.Label>
             <Form.Select
@@ -146,7 +274,7 @@ function UsuarioForm() {
             </Form.Select>
           </Form.Group>
 
-          <Form.Group className="mb-3">
+          <Form.Group className="mb-4">
             <Form.Label>Estado</Form.Label>
             <Form.Select
               name="estado"
@@ -164,7 +292,11 @@ function UsuarioForm() {
           <Button variant="primary" type="submit" disabled={saving}>
             {saving ? "Guardando..." : "Guardar"}
           </Button>{" "}
-          <Button variant="secondary" onClick={() => navigate("/usuarios")} disabled={saving}>
+          <Button
+            variant="secondary"
+            onClick={() => navigate("/usuarios")}
+            disabled={saving}
+          >
             Cancelar
           </Button>
         </Form>
