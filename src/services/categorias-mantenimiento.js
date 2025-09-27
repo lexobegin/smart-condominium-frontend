@@ -24,11 +24,6 @@ export const updateCategoriaMantenimiento = async (id, data) => {
 };
 
 export const deleteCategoriaMantenimiento = async (id) => {
-    try {
     const response = await api.delete(`/categorias-mantenimiento/${id}/`);
     return response.data;
-  } catch (error) {
-    console.error(`Error eliminando categoría ${id}:`, error);
-    throw error.response?.data || { detail: "Error eliminando categoría" };
-  }
 };

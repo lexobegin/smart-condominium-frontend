@@ -57,7 +57,6 @@ function CrearMantenimiento() {
     try {
       setSaving(true);
       await createMantenimientoPreventivo(form);
-      alert("Mantenimiento preventivo creado exitosamente");
       navigate("/mantenimientos-preventivos");
     } catch (err) {
       console.error("Error creando mantenimiento preventivo:", err);
@@ -155,7 +154,7 @@ function CrearMantenimiento() {
         </Form.Group>
 
         <Button type="submit" disabled={saving}>
-          {saving ? "Guardando..." : "Crear"}
+          {saving ? "Guardando..." : "Guardar"}
         </Button>{" "}
         <Button variant="secondary" onClick={() => navigate("/mantenimientos-preventivos")}>
           Cancelar

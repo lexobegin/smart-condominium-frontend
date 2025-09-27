@@ -29,12 +29,17 @@ function Listar() {
   const [showModal, setShowModal] = useState(false);
   const [selectedCategoria, setSelectedCategoria] = useState(null);
 
+  useEffect(() => {
+    loadCategorias(currentPage, searchTerm);
+  }, [currentPage, searchTerm]);
+
   const loadCategorias = async (page, search = "") => {
     try {
       setLoading(true);
       const data = await fetchCategoriasMantenimientos(page, search);
       setCategorias(data.results);
-      setTotalPages(Math.ceil(data.count / 10));
+      const total = Math.ceil(data.count / 10);
+      setTotalPages(total);
     } catch (err) {
       console.error("Error cargando categorías:", err);
       alert("No se pudieron cargar las categorías.");
@@ -42,10 +47,6 @@ function Listar() {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    loadCategorias(currentPage, searchTerm);
-  }, [currentPage, searchTerm]);
 
   // Modal handlers - eliminar
   const handleShowDeleteModal = (id) => {
