@@ -20,6 +20,10 @@ function Login() {
     try {
       const res = await api.post("/token/", { email, password });
       localStorage.setItem("token", res.data.access);
+
+      // 🔹 Guardar usuario en localStorage (simple con email)
+      localStorage.setItem("user", JSON.stringify({ email }));
+      console.log("Usuario guardado en localStorage:", { email });
       window.location.href = "/dashboard";
     } catch (err) {
       console.error(err.response?.data || err.message);

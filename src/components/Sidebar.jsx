@@ -128,7 +128,7 @@ function Sidebar() {
               <Nav.Link href="/mantenimientos-preventivos" className="ps-4">Mantenimiento Preventivo</Nav.Link>
               <Nav.Link href="/solicitudes-mantenimientos" className="ps-4">Mantenimiento Correctivo</Nav.Link>
               <Nav.Link href="/tareas-mantenimientos" className="ps-4">Asignar Tareas de Mantenimiento</Nav.Link>
-              <Nav.Link className="ps-4">Consultar Tareas Asignadas</Nav.Link>
+              <Nav.Link href="/tareas-asignadas" className="ps-4">Consultar Tareas Asignadas</Nav.Link>
               <Nav.Link className="ps-4">
                 Actualizar Estado de Tareas
               </Nav.Link>
