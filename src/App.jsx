@@ -41,6 +41,7 @@ import MantenimientoEditar from "./pages/mantenimientos-preventivos/Mantenimient
 import TareaListar from "./pages/tareas-mantenimiento/TareaListar";
 import TareaCrear from "./pages/tareas-mantenimiento/TareaCrear";
 import TareaEditar from "./pages/tareas-mantenimiento/TareaEditar";
+import TareaAsignada from "./pages/tareas-mantenimiento/TareasAsignada";
 
 // Solicitudes Mantenimiento
 import SolicitudListar from "./pages/solicitudes-mantenimiento/SolicitudListar";
@@ -251,6 +252,15 @@ function App() {
           element={
             <ProtectedRoute>
               <TareaListar />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tareas-asignadas"
+          element={
+            <ProtectedRoute>
+              <TareaAsignada />
             </ProtectedRoute>
           }
         />
