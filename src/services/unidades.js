@@ -9,6 +9,11 @@ export async function fetchUnidades(page = 1, search = "") {
   return data; // { count, results, ... }
 }
 
+export const listarUnidades = async () => {
+  const response = await api.get("/unidades/todos/");
+  return response.data;
+};
+
 /** Detalle por ID */
 export async function fetchUnidad(id) {
   const { data } = await api.get(`/unidades/${id}/`);

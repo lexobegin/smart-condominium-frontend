@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Offcanvas, Nav, Button, Collapse } from "react-bootstrap";
 import { FaBars, FaChevronDown } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 function Sidebar() {
   const [show, setShow] = useState(false);
   const [menusOpen, setMenusOpen] = useState({
     admin: false,
+    seguridad: false,
     areas: false,
     mantenimientos: false,
     reportes: false, // 👈 nuevo submenú
@@ -20,6 +22,8 @@ function Sidebar() {
       [menu]: !prev[menu],
     }));
   };
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -55,7 +59,13 @@ function Sidebar() {
         }}
       >
         <Nav className="flex-column px-3">
-          <Nav.Link href="/dashboard">Dashboard</Nav.Link>
+          <div
+            className="d-flex justify-content-between align-items-center py-2"
+            style={{ cursor: "pointer", fontWeight: "500", color: "#333" }}
+            onClick={() => navigate("/dashboard")}
+          >
+            Dashboard
+          </div>
 
           {/* Administración */}
           <div
@@ -71,7 +81,8 @@ function Sidebar() {
 
           <Collapse in={menusOpen.admin}>
             <div>
-              <Nav.Link href="/admin/roles" className="ps-4">
+              {/* NUEVO: Roles y Permisos + Bitácora */}
+              <Nav.Link href="" className="ps-4">
                 Role y Permiso
               </Nav.Link>
               <Nav.Link href="/admin/bitacora" className="ps-4">
@@ -89,6 +100,45 @@ function Sidebar() {
               <Nav.Link className="ps-4">Cuota y Expensas</Nav.Link>
               <Nav.Link className="ps-4">Multa y Cargo Adic.</Nav.Link>
               <Nav.Link className="ps-4">Comunicado</Nav.Link>
+            </div>
+          </Collapse>
+
+          {/* Seguridad */}
+          <div
+            className="d-flex justify-content-between align-items-center py-2"
+            onClick={() => toggleMenu("seguridad")}
+            style={{ cursor: "pointer", fontWeight: "500", color: "#333" }}
+          >
+            Seguridad{" "}
+            <FaChevronDown
+              className={`ms-2 ${menusOpen.seguridad ? "rotate-180" : ""}`}
+            />
+          </div>
+
+          <Collapse in={menusOpen.seguridad}>
+            <div>
+              {/* NUEVO: Roles y Permisos + Bitácora */}
+              <Nav.Link href="/camaras-seguridad" className="ps-4">
+                Camaras
+              </Nav.Link>
+              <Nav.Link href="" className="ps-4">
+                Alerta de Seguridad
+              </Nav.Link>
+              <Nav.Link href="/notificaciones" className="ps-4">
+                Notificaciones
+              </Nav.Link>
+              <Nav.Link href="/incidentes-seguridad" className="ps-4">
+                Incidentes
+              </Nav.Link>
+              <Nav.Link href="/visitantes" className="ps-4">
+                Visitantes
+              </Nav.Link>
+              <Nav.Link href="/accesos" className="ps-4">
+                Accesos
+              </Nav.Link>
+              <Nav.Link href="/vehiculos" className="ps-4">
+                Vehiculos
+              </Nav.Link>
             </div>
           </Collapse>
 
@@ -149,7 +199,6 @@ function Sidebar() {
               <Nav.Link className="ps-4">Actualizar Estado de Tareas</Nav.Link>
             </div>
           </Collapse>
-
           {/* Reportes */}
           <div
             className="d-flex justify-content-between align-items-center py-2"
@@ -175,6 +224,13 @@ function Sidebar() {
               </Nav.Link>
             </div>
           </Collapse>
+          <div
+            className="d-flex justify-content-between align-items-center py-2"
+            style={{ cursor: "pointer", fontWeight: "500", color: "#333" }}
+            onClick={() => navigate("")}
+          >
+            Reportes
+          </div>
         </Nav>
       </div>
 
@@ -209,11 +265,8 @@ function Sidebar() {
 
             <Collapse in={menusOpen.admin}>
               <div>
-                <Nav.Link
-                  href="/admin/roles"
-                  className="ps-4"
-                  onClick={handleClose}
-                >
+                {/* NUEVO: Roles y Permisos + Bitácora */}
+                <Nav.Link href="" className="ps-4" onClick={handleClose}>
                   Role y Permiso
                 </Nav.Link>
                 <Nav.Link
