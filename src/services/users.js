@@ -9,6 +9,21 @@ export async function fetchUsers(page = 1, search = "") {
   return data; // { count, results, ... }
 }
 
+export const listarUsers = async () => {
+  const response = await api.get("/usuarios/todos/");
+  return response.data;
+};
+
+export const listarUsersSeguridad = async () => {
+  const response = await api.get("/usuarios/todos/?tipo=seguridad");
+  return response.data;
+};
+
+export const listarResidentes = async () => {
+  const response = await api.get("/usuarios/todos/?tipo=residente");
+  return response.data;
+};
+
 /** Detalle por ID */
 export async function fetchUser(userId) {
   const { data } = await api.get(`/usuarios/${userId}/`);
