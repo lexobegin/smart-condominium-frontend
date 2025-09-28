@@ -30,7 +30,6 @@ import UnidadForm from "./pages/UnidadHabitacional/UnidadForm";
 import CategoriaListar from "./pages/categorias-mantenimiento/CategoriaListar";
 import CategoriaCrear from "./pages/categorias-mantenimiento/CategoriaCrear";
 import CategoriaEditar from "./pages/categorias-mantenimiento/CategoriaEditar";
-// import CategoriaVer from "./pages/categorias-mantenimiento/CategoriaVer";
 
 // Mantenimientos Preventivos
 import MantenimientoListar from "./pages/mantenimientos-preventivos/MantenimientoListar";
@@ -51,27 +50,10 @@ import SolicitudEditar from "./pages/solicitudes-mantenimiento/SolicitudEditar";
 // Bitácora
 import Bitacora from "./pages/bitacora/Bitacora";
 
-// Categorías Mantenimiento
-import CategoriaListar from "./pages/categorias-mantenimiento/CategoriaListar";
-import CategoriaCrear from "./pages/categorias-mantenimiento/CategoriaCrear";
-import CategoriaEditar from "./pages/categorias-mantenimiento/CategoriaEditar";
-// import CategoriaVer from "./pages/categorias-mantenimiento/CategoriaVer";
-
-// Mantenimientos Preventivos
-import MantenimientoListar from "./pages/mantenimientos-preventivos/MantenimientoListar";
-import MantenimientoCrear from "./pages/mantenimientos-preventivos/MantenimientoCrear";
-import MantenimientoEditar from "./pages/mantenimientos-preventivos/MantenimientoEditar";
-
-// Tareas Mantenimiento
-import TareaListar from "./pages/tareas-mantenimiento/TareaListar";
-import TareaCrear from "./pages/tareas-mantenimiento/TareaCrear";
-import TareaEditar from "./pages/tareas-mantenimiento/TareaEditar";
-import TareaAsignada from "./pages/tareas-mantenimiento/TareasAsignada";
-
-// Solicitudes Mantenimiento
-import SolicitudListar from "./pages/solicitudes-mantenimiento/SolicitudListar";
-import SolicitudCrear from "./pages/solicitudes-mantenimiento/SolicitudCrear";
-import SolicitudEditar from "./pages/solicitudes-mantenimiento/SolicitudEditar";
+// === NUEVOS REPORTES ===
+import ReportesFinancieros from "./pages/reportes/ReportesFinancieros";
+import ReportesAreasComunes from "./pages/reportes/ReportesAreasComunes";
+import ReportesVisuales from "./pages/reportes/ReportesVisuales";
 
 function App() {
   return (
@@ -206,6 +188,32 @@ function App() {
           }
         />
 
+        {/* Reportes */}
+        <Route
+          path="/reportes/financieros"
+          element={
+            <ProtectedRoute>
+              <ReportesFinancieros />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/reportes/areas-comunes"
+          element={
+            <ProtectedRoute>
+              <ReportesAreasComunes />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/reportes/visuales"
+          element={
+            <ProtectedRoute>
+              <ReportesVisuales />
+            </ProtectedRoute>
+          }
+        />
+
         {/* Categorías Mantenimiento */}
         <Route
           path="/categorias-mantenimiento"
@@ -324,118 +332,6 @@ function App() {
           element={
             <ProtectedRoute>
               <Bitacora />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Categorías de Mantenimiento */}
-        <Route
-          path="/categorias-mantenimiento"
-          element={
-            <ProtectedRoute>
-              <CategoriaListar />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/categorias-mantenimiento/crear"
-          element={
-            <ProtectedRoute>
-              <CategoriaCrear />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/categorias-mantenimiento/editar/:id"
-          element={
-            <ProtectedRoute>
-              <CategoriaEditar />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Mantenimientos Preventivos */}
-        <Route
-          path="/mantenimientos-preventivos"
-          element={
-            <ProtectedRoute>
-              <MantenimientoListar />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/mantenimiento-preventivo/crear"
-          element={
-            <ProtectedRoute>
-              <MantenimientoCrear />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/mantenimiento-preventivo/editar/:id"
-          element={
-            <ProtectedRoute>
-              <MantenimientoEditar />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Tareas de Mantenimiento */}
-        <Route
-          path="/tareas-mantenimientos"
-          element={
-            <ProtectedRoute>
-              <TareaListar />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/tareas-asignadas"
-          element={
-            <ProtectedRoute>
-              <TareaAsignada />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/tareas-mantenimiento/crear"
-          element={
-            <ProtectedRoute>
-              <TareaCrear />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/tareas-mantenimiento/editar/:id"
-          element={
-            <ProtectedRoute>
-              <TareaEditar />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Solicitudes de Mantenimiento */}
-        <Route
-          path="/solicitudes-mantenimientos"
-          element={
-            <ProtectedRoute>
-              <SolicitudListar />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/solicitud-mantenimiento/crear"
-          element={
-            <ProtectedRoute>
-              <SolicitudCrear />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/solicitud-mantenimiento/editar/:id"
-          element={
-            <ProtectedRoute>
-              <SolicitudEditar />
             </ProtectedRoute>
           }
         />
