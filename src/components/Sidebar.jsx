@@ -10,7 +10,7 @@ function Sidebar() {
     seguridad: false,
     areas: false,
     mantenimientos: false,
-    reportes: false, // 👈 nuevo submenú
+    reportes: false,
   });
 
   const handleToggle = () => setShow(!show);
@@ -199,6 +199,7 @@ function Sidebar() {
               <Nav.Link className="ps-4">Actualizar Estado de Tareas</Nav.Link>
             </div>
           </Collapse>
+
           {/* Reportes */}
           <div
             className="d-flex justify-content-between align-items-center py-2"
@@ -224,13 +225,13 @@ function Sidebar() {
               </Nav.Link>
             </div>
           </Collapse>
-          <div
+          {/*<div
             className="d-flex justify-content-between align-items-center py-2"
             style={{ cursor: "pointer", fontWeight: "500", color: "#333" }}
             onClick={() => navigate("")}
           >
             Reportes
-          </div>
+          </div>*/}
         </Nav>
       </div>
 
