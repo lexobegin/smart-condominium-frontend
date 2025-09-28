@@ -498,7 +498,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         {/* Bitácora */}
         <Route
           path="/admin/bitacora"
