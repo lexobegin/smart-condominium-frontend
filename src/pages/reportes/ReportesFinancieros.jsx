@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import DashboardLayout from "../../components/DashboardLayout";
 import { Card } from "react-bootstrap";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
 import { getReportesFinancieros } from "../../services/reportes";
+
+// Chart.js imports
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Pie } from "react-chartjs-2";
+
+// Registrar elementos necesarios
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 function ReportesFinancieros() {
   const [data, setData] = useState(null);
@@ -28,16 +27,43 @@ function ReportesFinancieros() {
 
   if (!data) return <p className="m-4">Cargando reporte financiero...</p>;
 
-  const pagosData = Object.keys(data.pagos).map((estado) => ({
-    name: estado,
-    value: data.pagos[estado],
-  }));
-  const COLORS = ["#00C49F", "#FFBB28", "#FF8042"];
+  // Preparar datos para el gráfico de pastel
+  const pagosData = {
+    labels: Object.keys(data.pagos),
+    datasets: [
+      {
+        data: Object.values(data.pagos),
+        backgroundColor: ["#00C49F", "#FFBB28", "#FF8042"],
+        hoverOffset: 8,
+      },
+    ],
+  };
+
+  const pagosOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "bottom",
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            const label = context.label || "";
+            const value = context.parsed;
+            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+            const percentage = ((value / total) * 100).toFixed(1);
+            return `${label}: ${value} (${percentage}%)`;
+          },
+        },
+      },
+    },
+  };
 
   return (
     <DashboardLayout>
       <h2>📊 Reporte Financiero</h2>
       <div className="d-flex flex-wrap gap-3 mt-4">
+        {/* Card: Morosidad */}
         <Card style={{ minWidth: "18rem" }}>
           <Card.Body>
             <Card.Title>Morosidad</Card.Title>
@@ -48,6 +74,7 @@ function ReportesFinancieros() {
           </Card.Body>
         </Card>
 
+        {/* Card: Ingresos */}
         <Card style={{ minWidth: "18rem" }}>
           <Card.Body>
             <Card.Title>Ingresos</Card.Title>
@@ -56,33 +83,13 @@ function ReportesFinancieros() {
           </Card.Body>
         </Card>
 
+        {/* Card: Gráfico de pastel */}
         <Card style={{ flex: 1 }}>
           <Card.Body>
             <Card.Title>Distribución de Pagos</Card.Title>
-            <ResponsiveContainer width="100%" height={250}>
-              <PieChart>
-                <Pie
-                  data={pagosData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  outerRadius={80}
-                  dataKey="value"
-                  label={({ name, percent }) =>
-                    `${name} ${(percent * 100).toFixed(0)}%`
-                  }
-                >
-                  {pagosData.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
+            <div style={{ width: "100%", height: "250px" }}>
+              <Pie data={pagosData} options={pagosOptions} />
+            </div>
           </Card.Body>
         </Card>
       </div>
