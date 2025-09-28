@@ -26,6 +26,11 @@ import CondominioForm from "./pages/condominio/CondominiosForm";
 import UnidadHabitacional from "./pages/UnidadHabitacional/UnidadHabitacional";
 import UnidadForm from "./pages/UnidadHabitacional/UnidadForm";
 
+// Categorías Mantenimiento
+import CategoriaListar from "./pages/categorias-mantenimiento/CategoriaListar";
+import CategoriaCrear from "./pages/categorias-mantenimiento/CategoriaCrear";
+import CategoriaEditar from "./pages/categorias-mantenimiento/CategoriaEditar";
+
 // Mantenimientos Preventivos
 import MantenimientoListar from "./pages/mantenimientos-preventivos/MantenimientoListar";
 import MantenimientoCrear from "./pages/mantenimientos-preventivos/MantenimientoCrear";
@@ -45,10 +50,6 @@ import SolicitudEditar from "./pages/solicitudes-mantenimiento/SolicitudEditar";
 // Bitácora
 import Bitacora from "./pages/bitacora/Bitacora";
 
-// Categorías Mantenimiento
-import CategoriaListar from "./pages/categorias-mantenimiento/CategoriaListar";
-import CategoriaCrear from "./pages/categorias-mantenimiento/CategoriaCrear";
-import CategoriaEditar from "./pages/categorias-mantenimiento/CategoriaEditar";
 import CamaraListar from "./pages/camaras-seguridad/CamaraListar";
 import CamaraEditar from "./pages/camaras-seguridad/CamaraEditar";
 import CamaraCrear from "./pages/camaras-seguridad/CamaraCrear";
@@ -71,6 +72,11 @@ import AreaListar from "./pages/areas-comunes/AreaListar";
 import AreaEditar from "./pages/areas-comunes/AreaEditar";
 import AreaCrear from "./pages/areas-comunes/AreaCrear";
 // import CategoriaVer from "./pages/categorias-mantenimiento/CategoriaVer";
+
+// === NUEVOS REPORTES ===
+import ReportesFinancieros from "./pages/reportes/ReportesFinancieros";
+import ReportesAreasComunes from "./pages/reportes/ReportesAreasComunes";
+import ReportesVisuales from "./pages/reportes/ReportesVisuales";
 
 function App() {
   return (
@@ -441,43 +447,33 @@ function App() {
           }
         />
 
-        {/* Solicitudes Mantenimiento */}
+        {/* Reportes */}
         <Route
-          path="/solicitudes-mantenimientos"
+          path="/reportes/financieros"
           element={
             <ProtectedRoute>
-              <SolicitudListar />
+              <ReportesFinancieros />
             </ProtectedRoute>
           }
         />
         <Route
-          path="/solicitud-mantenimiento/crear"
+          path="/reportes/areas-comunes"
           element={
             <ProtectedRoute>
-              <SolicitudCrear />
+              <ReportesAreasComunes />
             </ProtectedRoute>
           }
         />
         <Route
-          path="/solicitud-mantenimiento/editar/:id"
+          path="/reportes/visuales"
           element={
             <ProtectedRoute>
-              <SolicitudEditar />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Bitácora */}
-        <Route
-          path="/admin/bitacora"
-          element={
-            <ProtectedRoute>
-              <Bitacora />
+              <ReportesVisuales />
             </ProtectedRoute>
           }
         />
 
-        {/* Categorías de Mantenimiento */}
+        {/* Categorías Mantenimiento */}
         <Route
           path="/categorias-mantenimiento"
           element={
@@ -529,7 +525,7 @@ function App() {
           }
         />
 
-        {/* Tareas de Mantenimiento */}
+        {/* Tareas Mantenimiento */}
         <Route
           path="/tareas-mantenimientos"
           element={
@@ -563,7 +559,7 @@ function App() {
           }
         />
 
-        {/* Solicitudes de Mantenimiento */}
+        {/* Solicitudes Mantenimiento */}
         <Route
           path="/solicitudes-mantenimientos"
           element={
@@ -585,6 +581,16 @@ function App() {
           element={
             <ProtectedRoute>
               <SolicitudEditar />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Bitácora */}
+        <Route
+          path="/admin/bitacora"
+          element={
+            <ProtectedRoute>
+              <Bitacora />
             </ProtectedRoute>
           }
         />

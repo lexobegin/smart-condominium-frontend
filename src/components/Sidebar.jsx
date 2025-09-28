@@ -10,6 +10,7 @@ function Sidebar() {
     seguridad: false,
     areas: false,
     mantenimientos: false,
+    reportes: false, // 👈 nuevo submenú
   });
 
   const handleToggle = () => setShow(!show);
@@ -87,7 +88,6 @@ function Sidebar() {
               <Nav.Link href="/admin/bitacora" className="ps-4">
                 Bitácora
               </Nav.Link>
-
               <Nav.Link href="/usuarios" className="ps-4">
                 Usuarios
               </Nav.Link>
@@ -199,7 +199,31 @@ function Sidebar() {
               <Nav.Link className="ps-4">Actualizar Estado de Tareas</Nav.Link>
             </div>
           </Collapse>
+          {/* Reportes */}
+          <div
+            className="d-flex justify-content-between align-items-center py-2"
+            onClick={() => toggleMenu("reportes")}
+            style={{ cursor: "pointer", fontWeight: "500", color: "#333" }}
+          >
+            Reportes{" "}
+            <FaChevronDown
+              className={`ms-2 ${menusOpen.reportes ? "rotate-180" : ""}`}
+            />
+          </div>
 
+          <Collapse in={menusOpen.reportes}>
+            <div>
+              <Nav.Link href="/reportes/financieros" className="ps-4">
+                Financieros
+              </Nav.Link>
+              <Nav.Link href="/reportes/areas-comunes" className="ps-4">
+                Áreas Comunes
+              </Nav.Link>
+              <Nav.Link href="/reportes/visuales" className="ps-4">
+                Visuales
+              </Nav.Link>
+            </div>
+          </Collapse>
           <div
             className="d-flex justify-content-between align-items-center py-2"
             style={{ cursor: "pointer", fontWeight: "500", color: "#333" }}
@@ -252,7 +276,6 @@ function Sidebar() {
                 >
                   Bitácora
                 </Nav.Link>
-
                 <Nav.Link
                   href="/usuarios"
                   className="ps-4"
@@ -310,9 +333,43 @@ function Sidebar() {
               </div>
             </Collapse>
 
-            <Nav.Link href="/reportes" onClick={handleClose}>
-              Reportes
-            </Nav.Link>
+            {/* Reportes en móvil */}
+            <div
+              className="d-flex justify-content-between align-items-center py-2"
+              onClick={() => toggleMenu("reportes")}
+              style={{ cursor: "pointer", fontWeight: "500", color: "#333" }}
+            >
+              Reportes{" "}
+              <FaChevronDown
+                className={`ms-2 ${menusOpen.reportes ? "rotate-180" : ""}`}
+              />
+            </div>
+
+            <Collapse in={menusOpen.reportes}>
+              <div>
+                <Nav.Link
+                  href="/reportes/financieros"
+                  className="ps-4"
+                  onClick={handleClose}
+                >
+                  Financieros
+                </Nav.Link>
+                <Nav.Link
+                  href="/reportes/areas-comunes"
+                  className="ps-4"
+                  onClick={handleClose}
+                >
+                  Áreas Comunes
+                </Nav.Link>
+                <Nav.Link
+                  href="/reportes/visuales"
+                  className="ps-4"
+                  onClick={handleClose}
+                >
+                  Visuales
+                </Nav.Link>
+              </div>
+            </Collapse>
           </Nav>
         </Offcanvas.Body>
       </Offcanvas>
