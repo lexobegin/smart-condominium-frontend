@@ -225,6 +225,7 @@ function Sidebar() {
               </Nav.Link>
             </div>
           </Collapse>
+
           {/*<div
             className="d-flex justify-content-between align-items-center py-2"
             style={{ cursor: "pointer", fontWeight: "500", color: "#333" }}
