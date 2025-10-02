@@ -77,6 +77,9 @@ import AreaCrear from "./pages/areas-comunes/AreaCrear";
 import ReportesFinancieros from "./pages/reportes/ReportesFinancieros";
 import ReportesAreasComunes from "./pages/reportes/ReportesAreasComunes";
 import ReportesVisuales from "./pages/reportes/ReportesVisuales";
+import UsuarioListar from "./pages/usuarios/UsuarioListar";
+import UsuarioEditar from "./pages/usuarios/UsuarioEditar";
+import UsuarioCrear from "./pages/usuarios/UsuarioCrear";
 
 function App() {
   return (
@@ -84,11 +87,9 @@ function App() {
       <Routes>
         {/* Redirección desde la raíz */}
         <Route path="/" element={<RedirectToInitial />} />
-
         {/* Autenticación */}
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
-
         {/* Dashboard protegido */}
         <Route
           path="/dashboard"
@@ -98,7 +99,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         {/* Usuarios */}
         <Route
           path="/usuarios"
@@ -120,11 +120,27 @@ function App() {
           path="/usuarios/editar/:id"
           element={
             <ProtectedRoute>
-              <UsuarioForm />
+              <UsuarioEditar />
             </ProtectedRoute>
           }
         />
-
+        {/* Usuarios Face */}/usuarios/editar/
+        <Route
+          path="/usuarios-face"
+          element={
+            <ProtectedRoute>
+              <UsuarioListar />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/usuarios/crear"
+          element={
+            <ProtectedRoute>
+              <UsuarioCrear />
+            </ProtectedRoute>
+          }
+        />
         {/* Condominios */}
         <Route
           path="/condominios"
@@ -150,7 +166,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         {/* Unidades */}
         <Route
           path="/unidades"
@@ -176,7 +191,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         {/* Áreas comunes */}
         <Route
           path="/areas-comunes"
@@ -210,7 +224,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         {/* Camaras de Seguridad */}
         <Route
           path="/camaras-seguridad"
@@ -386,7 +399,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         {/* Mantenimientos Preventivos */}
         <Route
           path="/mantenimientos-preventivos"
@@ -412,7 +424,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         {/* Tareas Mantenimiento */}
         <Route
           path="/tareas-mantenimientos"
@@ -446,7 +457,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         {/* Reportes */}
         <Route
           path="/reportes/financieros"
@@ -472,7 +482,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         {/* Solicitudes Mantenimiento */}
         <Route
           path="/solicitudes-mantenimientos"
