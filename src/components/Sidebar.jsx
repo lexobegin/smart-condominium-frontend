@@ -88,7 +88,7 @@ function Sidebar() {
               <Nav.Link href="/admin/bitacora" className="ps-4">
                 Bitácora
               </Nav.Link>
-              <Nav.Link href="/usuarios" className="ps-4">
+              <Nav.Link href="/usuarios-face" className="ps-4">
                 Usuarios
               </Nav.Link>
               <Nav.Link href="/condominios" className="ps-4">
@@ -271,7 +271,7 @@ function Sidebar() {
                   Bitácora
                 </Nav.Link>
                 <Nav.Link
-                  href="/usuarios"
+                  href="/usuarios-face"
                   className="ps-4"
                   onClick={handleClose}
                 >
